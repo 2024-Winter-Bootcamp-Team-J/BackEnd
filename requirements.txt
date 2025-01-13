@@ -13,3 +13,5 @@ redis==5.2.1
 sqlparse==0.5.3
 typing_extensions==4.12.2
 uritemplate==4.1.1
+openai==1.59.7
+
