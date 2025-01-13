@@ -16,7 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import path, include, re_path
+from django.http import HttpResponse  # 임시로 홈 페이지 뷰를 작성
+def home(request):
+    return HttpResponse("Welcome to the Memo App!")  # 간단한 메시지 출력
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('memo.urls')),  # 메모 앱의 URL 연결
 ]
