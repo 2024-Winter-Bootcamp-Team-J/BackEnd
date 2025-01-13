@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg', # swagger 관련 앱
     'api' #API 앱 추가
     'memo' #memo(api) 앱 추가
 ]
