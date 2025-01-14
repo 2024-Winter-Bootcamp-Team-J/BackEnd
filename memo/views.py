@@ -1,6 +1,7 @@
 from rest_framework import generics
 from .models import Memo
 from .serializers import MemoCreateSerializer, MemoResponseSerializer, MemoRetrieveSerializer
+from rest_framework.response import Response
 
 # 메모 생성을 처리하는 뷰
 class MemoCreateView(generics.CreateAPIView):
