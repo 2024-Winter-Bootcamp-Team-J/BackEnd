@@ -24,4 +24,5 @@ def home(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('memo.urls')),  # 메모 앱의 URL 연결
+    path('api/', include('node.urls')),  # node 앱의 URL 연결
 ]
