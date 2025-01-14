@@ -8,7 +8,7 @@ class MemoCreateSerializer(serializers.Serializer):
     """
     메모 생성을 위한 요청 데이터를 처리하는 Serializer입니다.
     """
-    user_id = serializers.IntegerField()  # 메모를 생성할 사용자 ID
+    node_id = serializers.IntegerField()  # 메모를 생성할 사용자 ID
     content = serializers.CharField()  # 메모 내용
     created_at = serializers.DateTimeField(
         format="%Y-%m-%d-%H-%M-%S", read_only=True
