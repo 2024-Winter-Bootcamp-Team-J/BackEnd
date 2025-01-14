@@ -14,4 +14,5 @@ sqlparse==0.5.3
 typing_extensions==4.12.2
 uritemplate==4.1.1
 openai==1.59.7
-
+boto3==1.35.98
+python-dotenv==1.0.1

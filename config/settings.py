@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -38,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_yasg', # swagger 관련 앱
-    'api' #API 앱 추가
     'memo' #memo(api) 앱 추가
 ]
 
@@ -100,7 +103,11 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-
+# S3 setting
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME')
 
 
 # Password validation
