@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg', # swagger 관련 앱
     'api', #API 앱 추가
-    'memo' #memo(api) 앱 추가
+    'memo', #memo(api) 앱 추가
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -72,7 +73,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
+AUTH_USER_MODEL = 'users.User'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
