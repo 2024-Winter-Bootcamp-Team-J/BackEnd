@@ -3,7 +3,7 @@ from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
 class Memo(models.Model):
-    memo_id = models.BigIntegerField(primary_key=True)
+    memo_id = models.BigAutoField(primary_key=True)
     node_id = models.BigIntegerField()
     user_id = models.BigIntegerField()
     content = models.TextField()

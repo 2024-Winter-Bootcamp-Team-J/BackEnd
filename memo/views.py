@@ -15,10 +15,14 @@ class MemoCreateView(generics.CreateAPIView):
         """
         POST 요청 시 메모를 생성하고 성공 메시지를 반환합니다.
         """
-        response = super().create(request, *args, **kwargs)  # 부모 클래스의 create 메서드 호출
+        # 직렬화된 데이터를 저장
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        memo = serializer.save()  # 메모 생성
+        
         # 성공 응답 데이터 생성
-        success_response = MemoResponseSerializer({'status': 'success'})
-        return Response(success_response.data, status=response.status_code)
+        success_response = MemoResponseSerializer({'status': 'success', 'memo_id': memo.memo_id})
+        return Response(success_response.data, status=201)  # 성공 응답 반환
 
 # 특정 메모를 조회하는 뷰
 class MemoRetrieveView(generics.RetrieveAPIView):
