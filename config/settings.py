@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'drf_yasg', # swagger 관련 앱
     'api', #API 앱 추가
     'memo', #memo(api) 앱 추가
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -76,7 +77,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
+AUTH_USER_MODEL = 'users.User'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -103,13 +104,6 @@ CACHES = {
 # 세션 백엔드 설정 (Redis 사용)
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
-
-# OpenSearch 설정
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': ['localhost:9200'],
-    },
-}
 
 # S3 setting
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
