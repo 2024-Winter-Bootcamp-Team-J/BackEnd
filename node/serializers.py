@@ -27,19 +27,22 @@ class NodeCreateSerializer(serializers.ModelSerializer):
         }
 
 # Node 전체 조회 시 응답 데이터를 처리하는 Serializer
-class NodeListResponseSerializer(serializers.Serializer):
-    nodes = NodeCreateSerializer(many=True)
+class NodeListResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Node
+        fields = ['node_id', 'name', 'node_img', 'is_deleted', 'created_at']  # 모든 노드의 필드를 정의
 
     def to_representation(self, instance):
+        # 응답 데이터 포맷을 정의합니다.
         return {
-            "nodes": instance
+            "node_id": instance.node_id,
+            "name": instance.name,
+            "node_img": instance.node_img,
+            "is_deleted": instance.is_deleted,
+            "created_at": instance.created_at.strftime('%Y-%m-%dT%H:%M:%SZ'),
         }
 
 # Node 단일 조회 시 응답 데이터를 처리하는 Serializer
-class NodeDetailResponseSerializer(serializers.Serializer):
-    node = NodeCreateSerializer()
-
-    def to_representation(self, instance):
-        return {
-            "node": instance
-        }
+class NodeDetailResponseSerializer(NodeListResponseSerializer):
+    # 단일 조회는 NodeListResponseSerializer를 상속받아 그대로 사용
+    pass
