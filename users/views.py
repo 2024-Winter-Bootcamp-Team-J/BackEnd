@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,12 +5,12 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import UserRegisterSerializer, UserLoginSerializer
 from .user_service import register_user, login_user
-from drf_yasg import openapi
 from rest_framework.parsers import MultiPartParser, FormParser
 
 class UserRegistrationAPIView(APIView):
     # multipart 파서를 추가합니다.
     parser_classes = (MultiPartParser, FormParser)
+
     def get_permissions(self):
         if self.request.method == 'POST':
             return [AllowAny()]  # 회원가입은 인증 없이 허용
