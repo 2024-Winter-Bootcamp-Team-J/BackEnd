@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'drf_yasg', # swagger 관련 앱
     'api', #API 앱 추가
     'memo', #memo(api) 앱 추가
+    'search',  # 'search' 앱 추가
 ]
 
 MIDDLEWARE = [
