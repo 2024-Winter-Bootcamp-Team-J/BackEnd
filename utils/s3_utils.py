@@ -14,7 +14,7 @@ def upload_to_s3(file, bucket_name, file_name, acl="public-read"):
         region_name=settings.AWS_S3_REGION_NAME,
     )
     try:
-        s3.upload_fileobj(file, bucket_name, file_name, ExtraArgs={"ACL": acl})
+        s3.upload_fileobj(file, bucket_name, file_name)
         s3_url = f"https://{bucket_name}.s3.{settings.AWS_S3_REGION_NAME}.amazonaws.com/{file_name}"
         return s3_url
     except NoCredentialsError:
