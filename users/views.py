@@ -6,18 +6,21 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import UserRegisterSerializer, UserLoginSerializer
 from .user_service import register_user, login_user
-
+from drf_yasg import openapi
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class UserRegistrationAPIView(APIView):
+    # multipart 파서를 추가합니다.
+    parser_classes = (MultiPartParser, FormParser)
     def get_permissions(self):
         if self.request.method == 'POST':
             return [AllowAny()]  # 회원가입은 인증 없이 허용
         return [IsAuthenticated()]  # 다른 요청은 인증 필요
 
     # 회원가입
-    @swagger_auto_schema(  # swagger 테스트 설정
+    @swagger_auto_schema(
         request_body=UserRegisterSerializer,
-        responses={201: '회원가입 완료', 400: '잘못된 요청'}
+        responses={201: '회원가입 완료', 400: '잘못된 요청'},
     )
     def post(self, request):
         """

@@ -19,7 +19,10 @@ def register_user(email, password, nickname, profile_img_file=None):
         profile_img_url = None
 
     user = User.objects.create_user(
-        email=email, password=password, nickname=nickname, profile_img=profile_img_url
+        email=email,
+        password=password,
+        nickname=nickname,
+        profile_img=profile_img_url
     )
     return user
 
