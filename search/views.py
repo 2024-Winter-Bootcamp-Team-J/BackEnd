@@ -10,7 +10,7 @@ class MemoSearchView(APIView):
     Elasticsearch에서 메모를 검색하는 API 뷰입니다.
     """
     def get(self, request):
-        query = request.GET.get('query', '')  # GET 파라미터로 검색어를 받음
+        query = request.GET.get('query',None)  # GET 파라미터로 검색어를 받음
         if not query:
             return JsonResponse({'error': 'Query parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
 

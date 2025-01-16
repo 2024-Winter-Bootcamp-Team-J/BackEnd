@@ -41,3 +41,5 @@ tqdm==4.67.1
 typing_extensions==4.12.2
 uritemplate==4.1.1
 urllib3==1.26.20
+Pillow==9.0.1
+django-cors-headers==3.10.0

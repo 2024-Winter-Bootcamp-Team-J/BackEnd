@@ -45,8 +45,9 @@ INSTALLED_APPS = [
     'api', #API 앱 추가
     'memo', #memo(api) 앱 추가
     'search',  # 'search' 앱 추가
+    'corsheaders', # corsheaders 추가
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # corsheaders 미들웨어 추가
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -108,7 +110,7 @@ SESSION_CACHE_ALIAS = "default"
 # OpenSearch 설정
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': ['localhost:9200'],
+        'hosts': ['https://localhost:9200'],
     },
 }
 

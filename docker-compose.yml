@@ -29,6 +29,7 @@ services:
       - "${REDIS_PORT}:6379"
     networks:
       - django-network
+
   opensearch:
     image: opensearchproject/opensearch:2.4.0
     container_name: opensearch
@@ -42,6 +43,9 @@ services:
         hard: -1
     ports:
       - "9200:9200"
+    
+    networks:
+      - django-network
 
   web:
     build: .
