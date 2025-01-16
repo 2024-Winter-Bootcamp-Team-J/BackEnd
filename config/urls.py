@@ -39,6 +39,14 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+# Swagger에서 jwt 인증 관련
+AUTH_HEADER = openapi.Parameter(
+    'Authorization',
+    openapi.IN_HEADER,
+    description="JWT Authorization header. Example: 'Bearer <token>'",
+    type=openapi.TYPE_STRING
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('memo/', include('memo.urls')),
