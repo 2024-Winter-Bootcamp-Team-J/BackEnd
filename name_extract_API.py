@@ -29,4 +29,4 @@ def name_extract(text):
     return message
 
 # 테스트용
-name_extract(input())
+#name_extract(input())
