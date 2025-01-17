@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import RelationType, NodeRelation, RelationToType
+from .models import RelationType, NodeRelation, RelationToType, UserNodeRelation
+
 
 # serializers.py
 
@@ -19,3 +20,9 @@ class RelationToTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = RelationToType
         fields = ('relation_type_id', 'node_relation_id')
+
+
+class UserNodeRelationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserNodeRelation
+        fields = ('user_node_id', 'user_id', 'node_id', 'is_canceled', 'created_at')
