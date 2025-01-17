@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'api', #API 앱 추가
     'memo', #memo(api) 앱 추가
     'node', #node(api) 앱 추가
-    'users'
+    'users',
+    'relation'
 ]
 
 MIDDLEWARE = [
