@@ -203,3 +203,14 @@ SIMPLE_JWT = {
     'USER_ID_FIELD': 'user_id',                     # 사용자 모델의 ID 필드
     'USER_ID_CLAIM': 'user_id',                     # 토큰에 포함될 사용자 ID 필드 이름
 }
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        },
+    },
+    'USE_SESSION_AUTH': False,
+}
