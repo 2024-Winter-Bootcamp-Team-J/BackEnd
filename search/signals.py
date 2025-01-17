@@ -22,3 +22,4 @@ def index_memo(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=Memo)
 def delete_memo_from_index(sender, instance, **kwargs):
     MemoDocument.get(id=instance.memo_id).delete()
+    
