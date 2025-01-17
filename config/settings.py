@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'search',  # 'search' 앱 추가
     "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
 ]
+
 CORS_ALLOW_ALL_ORIGINS = True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
