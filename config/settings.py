@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 load_dotenv()
 
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt', # 회원 기능 jwt
+    'rest_framework_simplejwt.token_blacklist', # 블랙리스트
     'drf_yasg', # swagger 관련 앱
     'api', #API 앱 추가
     'memo', #memo(api) 앱 추가
@@ -67,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     'corsheaders.middleware.CorsMiddleware', # corsheaders 미들웨어 추가
 ]
 
@@ -87,6 +91,12 @@ TEMPLATES = [
         },
     },
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # 프론트엔드 도메인
+]
+
+CORS_ALLOW_CREDENTIALS = True
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -174,3 +184,22 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication', # jwt 관련
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),  # Access Token 유효기간
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh Token 유효기간
+    'ROTATE_REFRESH_TOKENS': True,                  # Refresh Token 재발급 시 새로 발급
+    'BLACKLIST_AFTER_ROTATION': True,               # 이전 Refresh Token 블랙리스트 처리
+    'AUTH_HEADER_TYPES': ('Bearer',),               # Authorization 헤더 유형 설정
+    'ALGORITHM': 'HS256',                           # 암호화 알고리즘
+    'SIGNING_KEY': SECRET_KEY,                      # 토큰 서명 키
+    'VERIFYING_KEY': None,                          # RSA를 사용할 경우 공개 키 설정
+    'USER_ID_FIELD': 'user_id',                     # 사용자 모델의 ID 필드
+    'USER_ID_CLAIM': 'user_id',                     # 토큰에 포함될 사용자 ID 필드 이름
+}

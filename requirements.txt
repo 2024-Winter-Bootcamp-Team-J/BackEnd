@@ -9,11 +9,12 @@ charset-normalizer==3.4.1
 colorama==0.4.6
 dateutils==0.6.12
 distro==1.9.0
-Django==3.2.25
-django-cors-headers==3.10.0
+Django==4.2.18
+django-cors-headers==4.6.0
 django-opensearch-dsl==0.6.2
 django-redis==5.4.0
 djangorestframework==3.15.1
+djangorestframework_simplejwt==5.4.0
 drf-yasg==1.21.8
 elastic-transport==8.17.0
 Events==0.5
@@ -32,6 +33,7 @@ Pillow==9.0.1
 psycopg2-binary==2.9.10
 pydantic==2.10.5
 pydantic_core==2.27.2
+PyJWT==2.10.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.2
