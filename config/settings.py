@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 load_dotenv()
 
@@ -175,4 +176,17 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication', # jwt 관련
     ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),  # Access Token 유효기간
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh Token 유효기간
+    'ROTATE_REFRESH_TOKENS': True,                  # Refresh Token 재발급 시 새로 발급
+    'BLACKLIST_AFTER_ROTATION': True,               # 이전 Refresh Token 블랙리스트 처리
+    'AUTH_HEADER_TYPES': ('Bearer',),               # Authorization 헤더 유형 설정
+    'ALGORITHM': 'HS256',                           # 암호화 알고리즘
+    'SIGNING_KEY': SECRET_KEY,                      # 토큰 서명 키
+    'VERIFYING_KEY': None,                          # RSA를 사용할 경우 공개 키 설정
+    'USER_ID_FIELD': 'user_id',                     # 사용자 모델의 ID 필드
+    'USER_ID_CLAIM': 'user_id',                     # 토큰에 포함될 사용자 ID 필드 이름
 }
