@@ -45,7 +45,19 @@ INSTALLED_APPS = [
     'api', #API 앱 추가
     'memo', #memo(api) 앱 추가
     'users'
+    'search',  # 'search' 앱 추가
+    "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
 ]
+CORS_ALLOW_ALL_ORIGINS = True
+
+OPENSEARCH_DSL = {
+    'default': {
+        'HOST': 'https://opensearch:9200',  # Docker Compose에서 설정한 서비스 이름
+        'PORT': 9200,
+        'USE_SSL': True,  # SSL 사용 여부
+        'TIMEOUT': 30,  # 타임아웃 설정
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # corsheaders 미들웨어 추가
 ]
 
 ROOT_URLCONF = 'config.urls'
