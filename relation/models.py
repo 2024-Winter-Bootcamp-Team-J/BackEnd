@@ -19,6 +19,7 @@ class UserNodeRelation(models.Model):
     user_node_id = models.BigAutoField(primary_key=True)
     node_id = models.ForeignKey(Node, on_delete=models.CASCADE, related_name='user_relations')
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='node_relations')
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
     canceled_at = models.DateTimeField(null=True, blank=True)
     is_canceled = models.BooleanField(default=False)
 
