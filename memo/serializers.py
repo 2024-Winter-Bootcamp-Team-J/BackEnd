@@ -9,16 +9,10 @@ class MemoCreateSerializer(serializers.Serializer):
     메모 생성을 위한 요청 데이터를 처리하는 Serializer입니다.
     """
     user_id = serializers.IntegerField()  # 메모를 생성할 사용자 ID
-    node_id = serializers.IntegerField() # 메모를 생성할 노드 ID
     content = serializers.CharField()  # 메모 내용
     created_at = serializers.DateTimeField(
         format="%Y-%m-%d-%H-%M-%S", read_only=True
     )  # 생성 시각(자동 생성, 읽기 전용)
-    def create(self, validated_data):
-        """
-        유효한 데이터로부터 새로운 Memo 객체를 생성합니다.
-        """
-        return Memo.objects.create(**validated_data)
 
 # 메모 생성 성공 시 반환되는 응답을 처리하기 위한 Serializer
 class MemoResponseSerializer(serializers.Serializer):
@@ -49,10 +43,8 @@ class MemoCreateView(APIView):
             # 데이터베이스에 새 메모를 생성합니다.
             Memo.objects.create(
                 user_id=serializer.validated_data['user_id'],  # 사용자 ID
-                content=serializer.validated_data['content'], # 메모 내용
-                node_id = serializer.validated_data['node_id'], # 노드 ID
+                content=serializer.validated_data['content']  # 메모 내용
             )
-            
             # 성공 응답 데이터를 반환합니다.
             response = MemoResponseSerializer({'status': 'success'})
             return Response(response.data, status=201)  # HTTP 201 Created

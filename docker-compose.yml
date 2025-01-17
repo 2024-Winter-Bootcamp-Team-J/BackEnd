@@ -1,5 +1,4 @@
 version: "3.9"
-
 services:
   db:
     image: postgres:14
@@ -29,7 +28,7 @@ services:
       - "${REDIS_PORT}:6379"
     networks:
       - django-network
-
+      
   opensearch:
     image: opensearchproject/opensearch:2.4.0
     container_name: opensearch
@@ -61,7 +60,6 @@ services:
     depends_on:
       - db
       - redis
-      - opensearch
     networks:
       - django-network
 

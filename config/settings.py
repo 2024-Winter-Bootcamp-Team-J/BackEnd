@@ -28,7 +28,7 @@ SECRET_KEY = "SECRET_KEY"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -44,10 +44,9 @@ INSTALLED_APPS = [
     'drf_yasg', # swagger 관련 앱
     'api', #API 앱 추가
     'memo', #memo(api) 앱 추가
-    'search',  # 'search' 앱 추가
-    "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
+    'users'
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -56,7 +55,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware', # corsheaders 미들웨어 추가
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -79,7 +77,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
+AUTH_USER_MODEL = 'users.User'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -106,16 +104,6 @@ CACHES = {
 # 세션 백엔드 설정 (Redis 사용)
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
-
-# OpenSearch 설정
-OPENSEARCH_DSL = {
-    'default': {
-        'HOST': 'https://opensearch:9200',  # Docker Compose에서 설정한 서비스 이름
-        'PORT': 9200,
-        'USE_SSL': True,  # SSL 사용 여부
-        'TIMEOUT': 30,  # 타임아웃 설정
-    }
-}
 
 # S3 setting
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
