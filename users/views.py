@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken  # JWT 토큰 발급을 위한 모듈 추가
 from .serializers import UserRegisterSerializer, UserLoginSerializer
 from .user_service import register_user, login_user
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -60,8 +61,17 @@ class UserLoginAPIView(APIView):
                     email=serializer.validated_data['email'],
                     password=serializer.validated_data['password'],
                 )
+
+                refresh = RefreshToken.for_user(user)  # RefreshToken 객체 생성
+                access_token = str(refresh.access_token)  # Access Token 생성
+
                 return Response(
-                    {"message": "로그인 성공", "user_id": user.user_id, "nickname": user.nickname},
+                    {"message": "로그인 성공",
+                     "user_id": user.user_id,
+                     "nickname": user.nickname,
+                     "access_token": access_token,  # Access Token 반환
+                     "refresh_token": str(refresh),  # Refresh Token 반환
+                     },
                     status=status.HTTP_200_OK,
                 )
             except ValueError as e:

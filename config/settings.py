@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 load_dotenv()
 
@@ -28,7 +29,7 @@ SECRET_KEY = "SECRET_KEY"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -41,13 +42,25 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt', # 회원 기능 jwt
+    'rest_framework_simplejwt.token_blacklist', # 블랙리스트
     'drf_yasg', # swagger 관련 앱
     'api', #API 앱 추가
     'memo', #memo(api) 앱 추가
-    'node', #node(api) 앱 추가
     'users',
-    'relation'
+    'search',  # 'search' 앱 추가
+    "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
 ]
+CORS_ALLOW_ALL_ORIGINS = True
+
+OPENSEARCH_DSL = {
+    'default': {
+        'HOST': 'https://opensearch:9200',  # Docker Compose에서 설정한 서비스 이름
+        'PORT': 9200,
+        'USE_SSL': True,  # SSL 사용 여부
+        'TIMEOUT': 30,  # 타임아웃 설정
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -57,6 +70,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware', # corsheaders 미들웨어 추가
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -77,6 +92,12 @@ TEMPLATES = [
     },
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # 프론트엔드 도메인
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
 WSGI_APPLICATION = 'config.wsgi.application'
 
 AUTH_USER_MODEL = 'users.User'
@@ -89,7 +110,7 @@ DATABASES = {
         "NAME": os.getenv("DB_NAME", "postgres"),
         "USER": os.getenv("DB_USER", "postgres"),
         "PASSWORD": os.getenv("DB_PASSWORD", "postgres"),
-        "HOST": os.getenv("DB_HOST", "localhost"),
+        "HOST": os.getenv("DB_HOST", "postgres"),
         "PORT": os.getenv("DB_PORT", 5432),
     }
 }
@@ -163,3 +184,22 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication', # jwt 관련
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),  # Access Token 유효기간
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh Token 유효기간
+    'ROTATE_REFRESH_TOKENS': True,                  # Refresh Token 재발급 시 새로 발급
+    'BLACKLIST_AFTER_ROTATION': True,               # 이전 Refresh Token 블랙리스트 처리
+    'AUTH_HEADER_TYPES': ('Bearer',),               # Authorization 헤더 유형 설정
+    'ALGORITHM': 'HS256',                           # 암호화 알고리즘
+    'SIGNING_KEY': SECRET_KEY,                      # 토큰 서명 키
+    'VERIFYING_KEY': None,                          # RSA를 사용할 경우 공개 키 설정
+    'USER_ID_FIELD': 'user_id',                     # 사용자 모델의 ID 필드
+    'USER_ID_CLAIM': 'user_id',                     # 토큰에 포함될 사용자 ID 필드 이름
+}
