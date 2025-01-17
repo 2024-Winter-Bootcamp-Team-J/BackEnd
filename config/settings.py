@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'api', #API 앱 추가
     'memo', #memo(api) 앱 추가
     'search',  # 'search' 앱 추가
-    'corsheaders', # corsheaders 추가
+    "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 MIDDLEWARE = [
@@ -89,7 +89,7 @@ DATABASES = {
         "NAME": os.getenv("DB_NAME", "postgres"),
         "USER": os.getenv("DB_USER", "postgres"),
         "PASSWORD": os.getenv("DB_PASSWORD", "postgres"),
-        "HOST": os.getenv("DB_HOST", "localhost"),
+        "HOST": os.getenv("DB_HOST", "postgres"),
         "PORT": os.getenv("DB_PORT", 5432),
     }
 }
@@ -108,10 +108,13 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
 # OpenSearch 설정
-ELASTICSEARCH_DSL = {
+OPENSEARCH_DSL = {
     'default': {
-        'hosts': ['https://localhost:9200'],
-    },
+        'HOST': 'https://opensearch:9200',  # Docker Compose에서 설정한 서비스 이름
+        'PORT': 9200,
+        'USE_SSL': True,  # SSL 사용 여부
+        'TIMEOUT': 30,  # 타임아웃 설정
+    }
 }
 
 # S3 setting

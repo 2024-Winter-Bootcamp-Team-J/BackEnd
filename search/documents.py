@@ -1,19 +1,18 @@
-from django_elasticsearch_dsl import Document, fields
-from django_elasticsearch_dsl.registries import registry
+from django_opensearch_dsl import Document
+from opensearch_dsl import Document
 from memo.models import Memo
 
 #model과 document를 연결하는 곳
-#document는 elasticsearch에 저장할 데이터를 정의
+#document는 Opensearch에 저장할 데이터를 정의
 
-@registry.register_document
 class MemoDocument(Document):
     class Index:
-        name = 'memos'
+        name = 'memo'
 
     class Django:
         model = Memo  # Memo 모델을 참조하여 매핑
 
-        # Memo 모델에서 정의된 필드를 Elasticsearch 필드로 자동 매핑
+        # Memo 모델에서 정의된 필드를 Openearch 필드로 자동 매핑
         fields = [
             'memo_id',
             'node_id',
@@ -23,7 +22,7 @@ class MemoDocument(Document):
             'created_at',
             'deleted_at',
         ]
-        
+    # 메모 검색을 위한 메소드
     @classmethod
     def search_memo(cls, query):
         # content 필드에 대해 full-text search
