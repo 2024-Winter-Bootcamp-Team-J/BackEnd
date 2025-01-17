@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt', # 회원 기능 jwt
+    'rest_framework_simplejwt.token_blacklist', # jwt 블랙리스트 처리
     'corsheaders', # CORS(회원인증) 관련
     'drf_yasg', # swagger 관련 앱
     'api', #API 앱 추가
