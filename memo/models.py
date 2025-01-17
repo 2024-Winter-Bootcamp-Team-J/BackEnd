@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Memo(models.Model):
     memo_id = models.BigAutoField(primary_key=True)
     node_id = models.BigIntegerField()
