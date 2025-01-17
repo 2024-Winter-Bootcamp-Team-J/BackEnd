@@ -8,6 +8,7 @@ from .documents import MemoDocument
 def index_memo(sender, instance, created, **kwargs):
     if created:
         # memo_document는 opensearch에 저장할 데이터를 정의
+        # openserach에 index가 자동으로 저장되어 있어서 한 번에 합치기가 불가능..
         memo_document = MemoDocument(meta={'id': instance.memo_id})
         memo_document.memo_id = instance.memo_id
         memo_document.node_id = instance.node_id
