@@ -19,6 +19,7 @@ def index_memo(sender, instance, created, **kwargs):
         memo_document.deleted_at = instance.deleted_at
         memo_document.save(index='memo')
 
+
 # memo앱의 delete이벤트가 발생하면 delete_memo_from_index함수 실행
 @receiver(post_delete, sender=Memo)
 def delete_memo_from_index(sender, instance, **kwargs):
