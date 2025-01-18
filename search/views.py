@@ -3,13 +3,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .documents import MemoDocument  # MemoDocument를 import하여 사용
+from .documents import NodeDocument  # NodeDocument를 import하여 사용
 from django.http import JsonResponse
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 class MemoSearchView(APIView):
     """
-        Elasticsearch에서 메모를 검색하는 API 뷰입니다.
+        Opensearch에서 memo_content와 node_name을을 검색하는 API 뷰입니다.
     """
     # swaaager_auto_schema 데코레이터를 사용하여 query 테스트트
     @swagger_auto_schema(
@@ -29,21 +30,34 @@ class MemoSearchView(APIView):
             return JsonResponse({'error': 'Query parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # opensearch에서 검색 실행
-        search_results = MemoDocument.search().query('match', content=query).execute()
+        memo_results = MemoDocument.search().query('match', content=query).execute()
+        node_results = NodeDocument.search().query('match', name=query).execute()
 
+        # 검색 결과를 합쳐서 정렬
+        
         # 검색된 결과를 직렬화하여 반환
         results = []
         results.extend(
             {
                 'memo_id': result.memo_id,
+                'node_id_inMemo': result.node_id,
                 'content': result.content,
                 'created_at': result.created_at,
                 'is_deleted': result.is_deleted,
             }
-            for result in search_results
+            for result in memo_results
         )
+        results.extend(
+            {
+                'node_id_inNode': result.node_id,
+                'name': result.name,
+                'created_at': result.created_at,
+                'is_deleted': result.is_deleted,
+            }
+            for result in node_results
+        )
+        
         # 검색결과가 없는 경우 404 에러를 반환
         if results == []:
             return JsonResponse({'error': 'No results found.'}, status=status.HTTP_404_NOT_FOUND)
         return JsonResponse({'results': results}, status=status.HTTP_200_OK)
-
