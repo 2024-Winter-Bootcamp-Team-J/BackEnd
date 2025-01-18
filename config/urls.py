@@ -25,7 +25,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.http import HttpResponse  # 임시로 홈 페이지 뷰를 작성
 def home(request):
-    return HttpResponse("Welcome to the Memo App!")  # 간단한 메시지 출력
+    return HttpResponse("Welcome to the homepage!")
 
 # Swagger 설정
 schema_view = get_schema_view(
@@ -51,9 +51,12 @@ schema_view.with_ui("swagger", cache_timeout=0)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home),  # 루트 URL에 홈 페이지 뷰 연결
     path('memos/', include('memo.urls')),
+    path('node/', include('node.urls')),  # node 앱의 URL 연결
     path('users/', include('users.urls')),
     path('search/', include('search.urls')), # search 앱의 URL을 포함
+    path('relations/', include('relation.urls')),  # relation 앱의 URL 연결
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

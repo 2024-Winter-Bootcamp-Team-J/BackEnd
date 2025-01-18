@@ -52,7 +52,7 @@ class MemoCreateView(APIView):
                 content=serializer.validated_data['content'], # 메모 내용
                 node_id = serializer.validated_data['node_id'], # 노드 ID
             )
-            
+
             # 성공 응답 데이터를 반환합니다.
             response = MemoResponseSerializer({'status': 'success'})
             return Response(response.data, status=201)  # HTTP 201 Created
