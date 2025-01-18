@@ -30,7 +30,7 @@ def home(request):
 # Swagger 설정
 schema_view = get_schema_view(
     openapi.Info(
-        title="프로젝트명",
+        title="LinkIn",
         default_version='v1',
         description="자동생성 인간관계도 API 문서",
         terms_of_service="https://www.google.com/policies/terms/",
@@ -46,6 +46,8 @@ AUTH_HEADER = openapi.Parameter(
     description="JWT Authorization header. Example: 'Bearer <token>'",
     type=openapi.TYPE_STRING
 )
+
+schema_view.with_ui("swagger", cache_timeout=0)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
