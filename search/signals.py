@@ -39,4 +39,4 @@ def index_node(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Node)
 def delete_node_from_index(sender, instance, **kwargs):
-    NodeDocument.get(id=instance.node_id).delete()
+    NodeDocument(meta={'id': instance.node_id}).get(id=instance.node_id).delete()
