@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
+from celery.schedules import crontab
 
 load_dotenv()
 
@@ -52,6 +53,8 @@ INSTALLED_APPS = [
     'relation', # relation 앱 추가
     'search',  # 'search' 앱 추가
     "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
+    'django_celery_beat', # Celery Beat 앱 추가
+    'django_celery_results', # Celery Results 앱 추가
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -215,4 +218,18 @@ SWAGGER_SETTINGS = {
         },
     },
     'USE_SESSION_AUTH': False,
+}
+
+# Celery setttings  
+CELERY_BROKER_URL = 'rabbitmq'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_BEAT_SCHEDULE = {
+    'example-task': {
+        'task': 'myapp.tasks.example_task',
+        'schedule': crontab(minute='*/1'),  # 매 1분마다 실행
+    },
 }
