@@ -29,6 +29,47 @@ services:
     networks:
       - django-network
       
+  # Celery 워커
+  celery:
+    container_name: celery_worker
+    build: .
+    command: celery -A myCelery worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - rabbitmq
+      - web
+      - redis
+    networks:
+      - django-network
+
+  # Celery Beat (주기적 작업 실행)
+  celery-beat:
+    container_name: celery-beat
+    build: .
+    command: celery -A myCelery beat --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+      - rabbitmq
+      - celery
+    networks:
+      - django-network
+
+  # RabbitMQ 서비스
+  rabbitmq:
+    container_name: rabbitmq
+    image: "rabbitmq:3-management"
+    environment:
+      RABBITMQ_USER : linkin
+      RABBITMQ_PASSWORD : linkin    
+    ports:
+      - "15672:15672"  # RabbitMQ 웹 UI (관리 페이지)
+      - "5672:5672"    # RabbitMQ 브로커 포트
+    networks:
+      - django-network
+
   opensearch:
     image: opensearchproject/opensearch:2.4.0
     container_name: opensearch
@@ -61,6 +102,7 @@ services:
     depends_on:
       - db
       - redis
+      - rabbitmq
     networks:
       - django-network
 
