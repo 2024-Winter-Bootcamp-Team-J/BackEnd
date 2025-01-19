@@ -66,3 +66,5 @@ uritemplate==4.1.1
 urllib3==1.26.20
 vine==5.1.0
 wcwidth==0.2.13
+setuptools==75.8.0
+wheel==0.45.1
