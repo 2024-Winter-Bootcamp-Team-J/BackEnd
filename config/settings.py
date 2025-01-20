@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'memo', #memo(api) 앱 추가
     'users',
     'search',  # 'search' 앱 추가
+    'relation',
+    'node',
     "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
 ]
 CORS_ALLOW_ALL_ORIGINS = True
