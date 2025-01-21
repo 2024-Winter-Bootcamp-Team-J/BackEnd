@@ -71,7 +71,7 @@ services:
       - django-network
 
   opensearch:
-    image: opensearchproject/opensearch:2.4.0
+    image: opensearchproject/opensearch:latest
     container_name: opensearch
     environment:
       - discovery.type=single-node
@@ -88,13 +88,16 @@ services:
       - opensearch_data:/usr/share/opensearch/data
     networks:
       - django-network
+
   opensearch-dashboards:
     image: opensearchproject/opensearch-dashboards:latest
     container_name: opensearch-dashboards
     ports:
       - "5601:5601"
     environment:
-      - OPENSEARCH_HOSTS=http://opensearch-node1:9200
+      - OPENSEARCH_HOSTS=https://opensearch:9200
+    networks:
+      - django-network
 
   web:
     build: .

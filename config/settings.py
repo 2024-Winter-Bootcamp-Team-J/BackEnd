@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'node', # node 앱 추가
     'relation', # relation 앱 추가
     'search',  # 'search' 앱 추가
+    'controller',  # 'controller' 앱 추가
     "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
     'django_celery_beat', # Celery Beat 앱 추가
     'django_celery_results', # Celery Results 앱 추가
@@ -110,7 +111,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logstash_async.handler.AsynchronousLogstashHandler',
             'transport': 'logstash_async.transport.TcpTransport',
-            'host': 'opensearch-node1',
+            'host': 'opensearch',
             'port': 9200,
             'database_path': 'logstash.db',
         },
