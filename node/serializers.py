@@ -3,20 +3,17 @@ from .models import Node
 
 # Node 생성 시 응답 데이터를 처리하는 Serializer
 class NodeCreateSerializer(serializers.ModelSerializer):
-    node_img = serializers.ImageField(required=True, use_url=True)
+    class Meta:
+        model = Node
+        fields = ['name']
+
+# Node 이미지 추가 시 데이터를 처리하는 Serializer
+class NodeImageUpdateSerializer(serializers.ModelSerializer):
+    node_id = serializers.IntegerField(required=True)
 
     class Meta:
         model = Node
-        fields = ['name', 'node_img']
-
-    def to_representation(self, instance):
-        """
-        `node_img` 필드가 URL로 직렬화되도록 보장합니다.
-        """
-        representation = super().to_representation(instance)
-        if instance.node_img:
-            representation['node_img'] = instance.node_img.url  # 이미지 필드를 URL로 변환
-        return representation
+        fields = ['node_id','node_img']
 
 # Node 전체 조회 시 응답 데이터를 처리하는 Serializer
 class NodeListResponseSerializer(serializers.ModelSerializer):

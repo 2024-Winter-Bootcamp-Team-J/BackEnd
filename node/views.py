@@ -1,66 +1,94 @@
+from opensearchpy.serializer import serializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .models import Node
-from .serializers import NodeCreateSerializer, NodeListResponseSerializer, NodeDetailResponseSerializer
+from .serializers import NodeCreateSerializer, NodeListResponseSerializer, NodeDetailResponseSerializer, NodeImageUpdateSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.conf import settings
 from utils.s3_utils import upload_to_s3  # upload_to_s3 함수가 utils.py에 정의된 경우
-
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.parsers import MultiPartParser
+
 
 class NodeCreateView(APIView):
     """
-    노드 생성 API (파일 업로드 포함)
+    노드 이름으로 생성하는 API
     """
-    parser_classes = [MultiPartParser]  # 파일 업로드를 처리하기 위해 MultiPartParser 추가
-
     @swagger_auto_schema(
         operation_summary="노드 생성",
-        operation_description="노드 생성 및 S3에 이미지 업로드",
         request_body=NodeCreateSerializer,  # 시리얼라이저를 그대로 사용
         responses={
-            201: openapi.Response(
-                'Node 생성 성공',
-                NodeCreateSerializer  # 응답 데이터도 시리얼라이저를 사용
-            ),
+            201: openapi.Response('Node 생성 성공', NodeCreateSerializer),
             400: '잘못된 요청 데이터',
         }
     )
     def post(self, request):
-        # 시리얼라이저로 요청 데이터 유효성 검사
         serializer = NodeCreateSerializer(data=request.data)
         if serializer.is_valid():
-            # 파일 업로드 로직
-            node_img = request.FILES.get('node_img')
-            if node_img:
-                # S3에 업로드된 이미지 파일의 URL 얻기
-                file_name = f"nodes/{node_img.name}"
-                s3_url = upload_to_s3(node_img, settings.AWS_STORAGE_BUCKET_NAME, file_name)
-                # serializer에 S3 URL 저장
-                serializer.validated_data['node_img'] = s3_url
-            else:
-                return Response({"detail": "File is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-            # 노드 생성 및 반환
             node = serializer.save()
             return Response(
-                serializer.data,  # 시리얼라이저 데이터 반환 (S3 URL 포함)
-                status=status.HTTP_201_CREATED,
+                {"node_id": node.node_id, "name": node.name},
+                status=status.HTTP_201_CREATED
             )
-
-        # 유효성 검사 실패 시 에러 응답 반환
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class NodeImageUpdateView(APIView):
+    """
+    노드 이미지 추가 API
+    """
+    parser_classes = (MultiPartParser,FormParser)
+
+
+    @swagger_auto_schema(
+        operation_summary="노드 이미지 추가",
+        request_body=NodeImageUpdateSerializer,
+        responses={201:"노드이미지 추가 성공", 400:"잘못된 요청"}
+    )
+    def post(self, request):
+        """
+        노드 이미지 추가API
+        """
+        serializer = NodeImageUpdateSerializer(data=request.data)
+
+        if serializer.is_valid():
+            node_id = serializer.validated_data['node_id']
+            try:
+                # 노드가 존재하는지 확인
+                node = Node.objects.get(node_id=node_id)
+
+                # 이미지 처리
+                node_img = request.FILES.get('node_img')
+
+                if node_img:
+                    bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+                    file_name = f"nodes/{node_img.name}"
+                    node_img_url = upload_to_s3(node_img, bucket_name,file_name)
+                else:
+                    node_img_url = None
+
+                node.node_img = node_img_url
+                node.save()
+
+                return Response(
+                    {"message" : "노드 이미지 추가 완료", "node_id": node.node_id},
+                    status=status.HTTP_201_CREATED,
+                )
+            except ValueError as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 class NodeListView(APIView):
     """
     모든 노드 목록 조회 API
     """
     @swagger_auto_schema(
+        operation_summary="노드 목록 조회",
         responses={
             200: openapi.Response(
                 '노드 목록 조회 성공',
@@ -96,6 +124,7 @@ class NodeDetailView(APIView):
     특정 노드 조회 API
     """
     @swagger_auto_schema(
+        operation_summary="단일 노드 조회",
         responses={
             200: openapi.Response(
                 '노드 상세 조회 성공',

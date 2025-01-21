@@ -51,8 +51,6 @@ INSTALLED_APPS = [
     'node', # node 앱 추가
     'relation', # relation 앱 추가
     'search',  # 'search' 앱 추가
-    'relation',
-    'node',
     "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
 ]
 CORS_ALLOW_ALL_ORIGINS = True
