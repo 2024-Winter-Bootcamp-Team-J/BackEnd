@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'api', #API 앱 추가
     'memo', #memo(api) 앱 추가
     'users',
+    'node', # node 앱 추가
+    'relation', # relation 앱 추가
     'search',  # 'search' 앱 추가
     'relation',
     'node',
