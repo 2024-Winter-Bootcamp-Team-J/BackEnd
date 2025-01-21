@@ -97,6 +97,38 @@ TEMPLATES = [
     },
 ]
 
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+        'logstash': {
+            'level': 'DEBUG',
+            'class': 'logstash_async.handler.AsynchronousLogstashHandler',
+            'transport': 'logstash_async.transport.TcpTransport',
+            'host': 'opensearch-node1',
+            'port': 9200,
+            'database_path': 'logstash.db',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'logstash'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'opensearch': {
+            'handlers': ['console', 'logstash'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # 프론트엔드 도메인
 ]
