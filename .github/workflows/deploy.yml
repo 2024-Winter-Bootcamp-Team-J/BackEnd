@@ -21,10 +21,17 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
+      # SSH 비밀 키를 임시 파일로 저장
+      - name: "Saving SSH private key to file..."
+        run : |
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ./id_rsa || { echo "Failed to save SSH private key"; exit 1; }
+            chmod 600 ./id_rsa || { echo "Failed to set permissions for SSH key"; exit 1; }
+            
+
       # 먼저 로컬에서 docker-compose-prod.yml을 EC2로 전송
       - name: Copy docker-compose-prod.yml to EC2
         run: |
-          scp -i ${{ secrets.SSH_PRIVATE_KEY }} ./backend/docker-compose-prod.yml ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/ubuntu/
+          scp -i ./id_rsa ./backend/docker-compose-prod.yml ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/ubuntu/
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
