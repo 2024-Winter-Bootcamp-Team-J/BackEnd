@@ -3,6 +3,7 @@ version: '3'
 services:
   web:
     build: .
+    image: gisu1102/2025techer:web
     container_name: django_web_prod
     env_file:
       - .env
@@ -14,7 +15,7 @@ services:
       - "8000"
 
   nginx:
-    image: nginx:alpine
+    image: gisu1102/2025techer:nginx
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - static_volume:/app/static
