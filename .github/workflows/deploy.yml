@@ -33,9 +33,23 @@ jobs:
             sudo chmod +x /usr/local/bin/docker-compose
             docker-compose --version  # 확인용
 
-      - name: Build and Push Docker images (multi-platform)
+      - name: Build and Push Multi-Platform Images
         run: |
-            docker-compose -f docker-compose-prod.yml build --push
+            docker buildx create --use
+            docker buildx build \
+              --platform linux/amd64,linux/arm64 \
+              --push \
+              -t gisu1102/2025techer:web \
+              -f ./Dockerfile \
+              ./web
+            docker buildx build \
+              --platform linux/amd64,linux/arm64 \
+              --push \
+              -t gisu1102/2025techer:nginx \
+              -f ./nginx/Dockerfile \
+              ./nginx
+
+
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
