@@ -80,7 +80,7 @@ services:
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
       - OPENSEARCH_INITIAL_ADMIN_PASSWORD=Link-in1234
     ports:
-      - "9200:9200"  # HTTP 포트
+      - "9200:9200" 
     volumes:
       - opensearch_data:/usr/share/opensearch/data
     networks:
@@ -92,7 +92,16 @@ services:
     ports:
       - "5601:5601"
     environment:
-      - OPENSEARCH_HOSTS=https://opensearch:9200  # HTTP 프로토콜로 연결
+      - OPENSEARCH_HOSTS=https://opensearch:9200
+    networks:
+      - django-network
+
+  logstash:
+    image: opensearchproject/logstash-oss-with-opensearch-output-plugin:latest
+    container_name: logstash
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./django_logs:/usr/share/logstash/logs
     networks:
       - django-network
 
@@ -105,6 +114,7 @@ services:
       - .env
     volumes:
       - .:/code
+      - ./django_logs:/app/django_logs
     ports:
       - "8000:8000"
     depends_on:

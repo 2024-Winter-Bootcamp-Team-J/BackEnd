@@ -98,42 +98,37 @@ TEMPLATES = [
     },
 ]
 
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
         },
-        'logstash': {
+        'json': {  # 추가된 JSON 포맷터
+            'format': '{"timestamp": "%(asctime)s", "level": "%(levelname)s", "module": "%(module)s", "message": "%(message)s"}',
+            'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
+        },
+    },
+    'handlers': {
+        'file': {
             'level': 'DEBUG',
-            'class': 'logstash_async.handler.AsynchronousLogstashHandler',
-            'transport': 'logstash_async.transport.TcpTransport',
-            'host': 'opensearch', 
-            'port': 9200,
-            'database_path': 'logstash.db',
+            'class': 'logging.FileHandler',
+            'filename': '/app/django_logs.json',  # 로그 파일 경로
+            'formatter': 'json',  # JSON 포맷터를 사용
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'logstash'],
+            'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,
-        },
-        'opensearch': {
-            'handlers': ['console', 'logstash'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'django.db.backends': {  # 데이터베이스 관련 로그
-            'handlers': ['console', 'logstash'],
-            'level': 'DEBUG',  # 모든 쿼리 로그를 기록
-            'propagate': False,
         },
     },
 }
+
+
 
 
 CORS_ALLOWED_ORIGINS = [
@@ -151,11 +146,11 @@ AUTH_USER_MODEL = 'users.User'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME", "postgres"),
-        "USER": os.getenv("DB_USER", "postgres"),
-        "PASSWORD": os.getenv("DB_PASSWORD", "postgres"),
-        "HOST": os.getenv("DB_HOST", "postgres"),
-        "PORT": os.getenv("DB_PORT", 5432),
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
     }
 }
 CACHES = {
