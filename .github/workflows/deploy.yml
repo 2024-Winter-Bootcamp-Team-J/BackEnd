@@ -56,6 +56,10 @@ jobs:
             echo "${{ secrets.SSH_PRIVATE_KEY }}" > ./id_rsa
             chmod 600 ./id_rsa
             
+            - name: List files to check path
+            run: ls -al ./
+            run: ls -al ./backend
+            
             # docker-compose-prod.yml 파일을 EC2에 복사
             echo "Copying docker-compose-prod.yml to EC2..."
             scp -i ./id_rsa ./backend/docker-compose-prod.yml ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/ubuntu/
