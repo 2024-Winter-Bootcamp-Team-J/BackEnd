@@ -21,7 +21,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
-
+      # 먼저 로컬에서 docker-compose-prod.yml을 EC2로 전송
+      - name: Copy docker-compose-prod.yml to EC2
+        run: |
+          scp -i ./id_rsa ./backend/docker-compose-prod.yml ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/ubuntu/
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
@@ -55,15 +58,6 @@ jobs:
             echo "Saving SSH private key to file..."
             echo "${{ secrets.SSH_PRIVATE_KEY }}" > ./id_rsa || { echo "Failed to save SSH private key"; exit 1; }
             chmod 600 ./id_rsa || { echo "Failed to set permissions for SSH key"; exit 1; }
-            
-            - name: List files to check path
-              run: |
-                ls -al ./
-                ls -al ./backend
-            
-            # docker-compose-prod.yml 파일을 EC2에 복사
-            echo "Copying docker-compose-prod.yml to EC2..."
-            scp -v -i ./id_rsa ./backend/docker-compose-prod.yml ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/ubuntu/
             
             
             # 해당 프로젝트 폴더로 이동 (필요한 경우)
