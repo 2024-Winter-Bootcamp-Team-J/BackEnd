@@ -41,7 +41,7 @@ jobs:
               --push \
               -t gisu1102/2025techer:web \
               -f ./Dockerfile \
-              ./web
+              ./
             docker buildx build \
               --platform linux/amd64,linux/arm64 \
               --push \
