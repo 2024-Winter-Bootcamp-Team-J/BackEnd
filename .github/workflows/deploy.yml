@@ -27,7 +27,7 @@ jobs:
 
       - name: Build and Push Docker images (multi-platform)
         run: |
-          docker buildx build --platform linux/amd64,linux/arm64 -f docker-compose-prod.yml -t gisu1102/2025techer:latest --push .
+            docker-compose -f docker-compose-prod.yml build --push
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
