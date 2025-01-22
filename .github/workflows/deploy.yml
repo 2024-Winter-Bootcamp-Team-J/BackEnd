@@ -53,12 +53,13 @@ jobs:
             
             # SSH 비밀 키를 임시 파일로 저장
             echo "Saving SSH private key to file..."
-            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ./id_rsa
-            chmod 600 ./id_rsa
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ./id_rsa || { echo "Failed to save SSH private key"; exit 1; }
+            chmod 600 ./id_rsa || { echo "Failed to set permissions for SSH key"; exit 1; }
             
             - name: List files to check path
-            run: ls -al ./
-            run: ls -al ./backend
+              run: |
+                ls -al ./
+                ls -al ./backend
             
             # docker-compose-prod.yml 파일을 EC2에 복사
             echo "Copying docker-compose-prod.yml to EC2..."
