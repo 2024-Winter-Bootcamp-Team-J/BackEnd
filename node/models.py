@@ -7,7 +7,10 @@ class Node(models.Model):
     is_deleted = models.BooleanField(default=False)  # 삭제 여부 (기본값: False)
     deleted_at = models.DateTimeField(null=True, blank=True)  # 삭제 시각 (Null 가능)
     # S3에 저장될 이미지 필드로 변경
-    node_img = models.ImageField(upload_to='node_images/', null=True,blank=True)  # 이미지 파일 경로 (S3 저장)# 이미지 링크 (최대 길이 255)
+    node_img = models.TextField(null=True, blank=True)
+
+
+    # 커스텀 매니저 연결
 
     def __str__(self):
         return self.name

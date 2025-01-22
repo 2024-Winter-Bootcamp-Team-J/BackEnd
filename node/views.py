@@ -63,9 +63,11 @@ class NodeImageUpdateView(APIView):
                 node_img = request.FILES.get('node_img')
 
                 if node_img:
+                    print(111111)
                     bucket_name = settings.AWS_STORAGE_BUCKET_NAME
                     file_name = f"nodes/{node_img.name}"
                     node_img_url = upload_to_s3(node_img, bucket_name,file_name)
+                    print(node_img_url)
                 else:
                     node_img_url = None
 
@@ -99,9 +101,9 @@ class NodeListView(APIView):
                         properties={
                             'node_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='노드 ID'),
                             'name': openapi.Schema(type=openapi.TYPE_STRING, description='노드 이름'),
-                            'node_img': openapi.Schema(type=openapi.TYPE_STRING, description='노드 이미지 URL', format=openapi.FORMAT_URI),
                             'is_deleted': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='삭제 여부'),
                             'created_at': openapi.Schema(type=openapi.TYPE_STRING, description='생성 시각', format=openapi.FORMAT_DATETIME),
+                            'deleted_at': openapi.Schema(type=openapi.TYPE_STRING, description='삭제 시각', format=openapi.FORMAT_DATETIME, nullable=True),
                         }
                     )
                 )
@@ -133,7 +135,6 @@ class NodeDetailView(APIView):
                     properties={
                         'node_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='노드 ID'),
                         'name': openapi.Schema(type=openapi.TYPE_STRING, description='노드 이름'),
-                        'node_img': openapi.Schema(type=openapi.TYPE_STRING, description='노드 이미지 URL', format=openapi.FORMAT_URI),
                         'is_deleted': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='삭제 여부'),
                         'created_at': openapi.Schema(type=openapi.TYPE_STRING, description='생성 시각', format=openapi.FORMAT_DATETIME),
                         'deleted_at': openapi.Schema(type=openapi.TYPE_STRING, description='삭제 시각', format=openapi.FORMAT_DATETIME, nullable=True),
