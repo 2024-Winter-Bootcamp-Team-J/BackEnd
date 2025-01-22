@@ -1,9 +1,9 @@
 from django.db import models
+from django.conf import settings
 
 class Memo(models.Model):
     memo_id = models.BigAutoField(primary_key=True)
-    node_id = models.BigIntegerField()
-    user_id = models.BigIntegerField()
+    node = models.ForeignKey('node.Node', on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField()
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
