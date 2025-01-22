@@ -55,6 +55,9 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
+# logstash
+logstash.db
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -273,3 +276,4 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/django,python,redis
 
 secrets.json
+

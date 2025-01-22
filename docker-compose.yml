@@ -70,6 +70,7 @@ services:
     networks:
       - django-network
 
+  # OpenSearch 서비스
   opensearch:
     image: opensearchproject/opensearch:latest
     container_name: opensearch
@@ -77,13 +78,9 @@ services:
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=Link-in1234
     ports:
-      - "9200:9200"
-      - "9600:9600"
+      - "9200:9200"  # HTTP 포트
     volumes:
       - opensearch_data:/usr/share/opensearch/data
     networks:
@@ -95,9 +92,10 @@ services:
     ports:
       - "5601:5601"
     environment:
-      - OPENSEARCH_HOSTS=https://opensearch:9200
+      - OPENSEARCH_HOSTS=https://opensearch:9200  # HTTP 프로토콜로 연결
     networks:
       - django-network
+
 
   web:
     build: .
@@ -113,6 +111,7 @@ services:
       - db
       - redis
       - rabbitmq
+      - opensearch
     networks:
       - django-network
 
