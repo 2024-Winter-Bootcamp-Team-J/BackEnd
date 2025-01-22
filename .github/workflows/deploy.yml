@@ -62,7 +62,7 @@ jobs:
             
             # docker-compose-prod.yml 파일을 EC2에 복사
             echo "Copying docker-compose-prod.yml to EC2..."
-            scp -i ./id_rsa ./backend/docker-compose-prod.yml ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/ubuntu/
+            scp -v -i ./id_rsa ./backend/docker-compose-prod.yml ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/ubuntu/
             
             
             # 해당 프로젝트 폴더로 이동 (필요한 경우)
