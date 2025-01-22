@@ -31,9 +31,9 @@ jobs:
       # 먼저 로컬에서 docker-compose-prod.yml을 EC2로 전송
       - name: Copy docker-compose-prod.yml to EC2
         run: |
-          scp -o StrictHostKeyChecking=no -i ./id_rsa ./backend/docker-compose-prod.yml ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/ubuntu/
+          scp -o StrictHostKeyChecking=no -i ./id_rsa ./docker-compose-prod.yml ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/ubuntu/
           
-          
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
