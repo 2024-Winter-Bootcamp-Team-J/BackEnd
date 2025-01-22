@@ -28,9 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "SECRET_KEY"
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['django_web_prod', '0.0.0.0', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
     'django_celery_beat', # Celery Beat 앱 추가
     'django_celery_results', # Celery Results 앱 추가
+
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -233,3 +234,16 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*/1'),  # 매 1분마다 실행
     },
 }
+
+
+
+# 정적 파일 설정
+STATIC_URL = '/static/'  # URL 경로
+# collectstatic으로 모을 정적 파일들이 위치할 디렉토리
+STATIC_ROOT = '/app/static/' # static 디렉토리로 설정
+
+
+# 미디어 파일 설정
+MEDIA_URL = '/media/'  # URL 경로
+# 미디어 파일들이 저장될 디렉토리
+MEDIA_ROOT = '/app/media'

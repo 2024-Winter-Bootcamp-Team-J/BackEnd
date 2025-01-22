@@ -24,6 +24,9 @@ from rest_framework_simplejwt.views import (
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.http import HttpResponse  # 임시로 홈 페이지 뷰를 작성
+from django.conf.urls.static import static
+from django.conf import settings
+
 def home(request):
     return HttpResponse("Welcome to the homepage!")
 
@@ -64,3 +67,4 @@ urlpatterns = [
     path('api/token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
 ]
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

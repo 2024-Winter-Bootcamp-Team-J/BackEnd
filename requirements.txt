@@ -68,3 +68,4 @@ vine==5.1.0
 wcwidth==0.2.13
 setuptools==75.8.0
 wheel==0.45.1
+gunicorn>=20.1.0,<21.0.0
