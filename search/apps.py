@@ -7,12 +7,10 @@ class SearchConfig(AppConfig):
     name = 'search'
     def ready(self):
         import search.signals  # 신호를 연결
-        from opensearchpy import OpenSearch
-        from django.conf import settings
-
-        self.client = OpenSearch(
-            hosts=[{'host': 'https://opensearch:9200', 'port': 9200}],
-            http_auth=('admin', 'Link-in1234'),
-            use_ssl=True,
-            verify_certs=True,
+        connections.create_connection(
+        alias="default",  # 기본 alias
+        hosts=["https://opensearch:9200"],  # OpenSearch 클러스터 호스트
+        http_auth=("admin", "Link-in1234"),  # 인증 정보
+        use_ssl=True,
+        verify_certs=False
         )

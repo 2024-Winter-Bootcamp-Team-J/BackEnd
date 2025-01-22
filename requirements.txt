@@ -45,7 +45,6 @@ kombu==5.4.2
 limits==4.0.1
 openai==1.59.7
 opensearch-dsl==1.0.0
-opensearch-py==2.8.0
 packaging==24.2
 Pillow==9.3.0
 prompt_toolkit==3.0.48
