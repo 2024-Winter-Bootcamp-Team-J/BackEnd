@@ -61,8 +61,13 @@ jobs:
             # .env 파일을 GitHub Secrets에서 가져와서 EC2에 복사
             echo "Decoding .env file from GitHub Secrets..."
             echo "${{ secrets.MY_ENV_FILE }}" | base64 --decode > .env
+            
             # 해당 프로젝트 폴더로 이동 (필요한 경우)
-            #cd 
+        
+            # docker-compose-prod.yml 파일을 EC2에 복사
+            echo "Copying docker-compose-prod.yml to EC2..."
+            scp -i ${{ secrets.SSH_PRIVATE_KEY }} docker-compose-prod.yml ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/ubuntu
+            
             
             # 최신 Docker 이미지를 가져오기 (docker-compose-prod.yml에 정의된 모든 서비스에 대해 pull 실행)
             echo "Pulling the latest Docker images..."
