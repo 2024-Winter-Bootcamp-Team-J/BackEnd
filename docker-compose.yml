@@ -60,6 +60,7 @@ services:
     depends_on:
       - db
       - redis
+      - opensearch
     networks:
       - django-network
 
