@@ -115,7 +115,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/app/django_logs.json',  # 로그 파일 경로
+            'filename': '/app/django_logs/django.log',  # 로그 파일 경로
             'formatter': 'json',  # JSON 포맷터를 사용
         },
     },
@@ -123,6 +123,31 @@ LOGGING = {
         'django': {
             'handlers': ['file'],
             'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.contrib.admin': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.core.cache': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.middleware': {
+            'handlers': ['file'],
+            'level': 'INFO',
             'propagate': True,
         },
     },
