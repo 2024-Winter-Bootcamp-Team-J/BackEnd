@@ -124,7 +124,6 @@ class CreateUserNodeRelationView(APIView):
         ),
         responses={
             201: openapi.Response('생성된 데이터', UserNodeRelationSerializer),
-
             400: '잘못된 요청 데이터'
         }
     )
