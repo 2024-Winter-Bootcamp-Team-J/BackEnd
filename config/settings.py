@@ -58,9 +58,9 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 OPENSEARCH_DSL = {
     'default': {
-        'HOST': 'http://opensearch:9200',  # Docker Compose에서 설정한 서비스 이름
+        'HOST': 'https://opensearch:9200',  # Docker Compose에서 설정한 서비스 이름
         'PORT': 9200,
-        'USE_SSL': False,  # SSL 사용 여부
+        'USE_SSL': True,  # SSL 사용 여부
         'TIMEOUT': 30,  # 타임아웃 설정
     }
 }
