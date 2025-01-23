@@ -7,12 +7,7 @@ from .models import Write
 from .serializers import WriteSerializer
 from .name_extract_API import name_extract
 from search.documents import NodeDocument
-from node.models import Node
-from memo.models import Memo
 from node.serializers import NodeCreateSerializer
-from memo.serializers import MemoCreateSerializer
-import requests
-import os
 
 class ControllerView(APIView):
 
@@ -78,33 +73,4 @@ class ControllerView(APIView):
                         )
 
 
-                    # 메모 생성
-                    memo_serializer = MemoCreateSerializer(data={
-                        "node": node_data["node_id"],
-                        "content": write.content,
-                    })
-
-                    if memo_serializer.is_valid():
-                        memo_serializer.save()
-                    else:
-                        nodes_result[group].append({
-                            "error": "메모 저장 실패",
-                            "details": memo_serializer.errors,
-                            "name": name,
-                        })
-                        continue
-
-
-                    nodes_result[group].append(node_data)
-
-                # 결과 반환
-                return Response(
-                    {
-                        "message": "글 작성, 이름 추출, Node 및 메모 처리 완료",
-                        "write": serializer.data,
-                        "extracted_names": extracted_names,
-                        "nodes": nodes_result,
-                    },
-                    status=status.HTTP_201_CREATED,
-                )
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
