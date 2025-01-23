@@ -53,7 +53,6 @@ urlpatterns = [
     path('memos/', include('memo.urls')),
     path('node/', include('node.urls')),  # node 앱의 URL 연결
     path('users/', include('users.urls')),
-    path('controller/', include('controller.urls')),
     path('search/', include('search.urls')), # search 앱의 URL을 포함
     path('relations/', include('relation.urls')),  # relation 앱의 URL 연결
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
