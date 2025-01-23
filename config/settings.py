@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
+from celery.schedules import crontab
 
 load_dotenv()
 
@@ -51,16 +52,17 @@ INSTALLED_APPS = [
     'node', # node 앱 추가
     'relation', # relation 앱 추가
     'search',  # 'search' 앱 추가
-    'controller', #controller 앱 추가
     "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
+    'django_celery_beat', # Celery Beat 앱 추가
+    'django_celery_results', # Celery Results 앱 추가
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 
 OPENSEARCH_DSL = {
     'default': {
-        'HOST': 'http://opensearch:9200',  # Docker Compose에서 설정한 서비스 이름
+        'HOST': 'https://opensearch:9200',  # Docker Compose에서 설정한 서비스 이름
         'PORT': 9200,
-        'USE_SSL': False,  # SSL 사용 여부
+        'USE_SSL': True,  # SSL 사용 여부
         'TIMEOUT': 30,  # 타임아웃 설정
     }
 }
@@ -205,4 +207,29 @@ SIMPLE_JWT = {
     'VERIFYING_KEY': None,                          # RSA를 사용할 경우 공개 키 설정
     'USER_ID_FIELD': 'user_id',                     # 사용자 모델의 ID 필드
     'USER_ID_CLAIM': 'user_id',                     # 토큰에 포함될 사용자 ID 필드 이름
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        },
+    },
+    'USE_SESSION_AUTH': False,
+}
+
+# Celery setttings  
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_BEAT_SCHEDULE = {
+    'example-task': {
+        'task': 'myapp.tasks.example_task',
+        'schedule': crontab(minute='*/1'),  # 매 1분마다 실행
+    },
 }

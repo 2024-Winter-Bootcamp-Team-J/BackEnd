@@ -30,7 +30,7 @@ def home(request):
 # Swagger 설정
 schema_view = get_schema_view(
     openapi.Info(
-        title="프로젝트명",
+        title="LinkIn",
         default_version='v1',
         description="자동생성 인간관계도 API 문서",
         terms_of_service="https://www.google.com/policies/terms/",
@@ -47,19 +47,20 @@ AUTH_HEADER = openapi.Parameter(
     type=openapi.TYPE_STRING
 )
 
+schema_view.with_ui("swagger", cache_timeout=0)
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin', admin.site.urls),
     path('', home),  # 루트 URL에 홈 페이지 뷰 연결
-    path('memos/', include('memo.urls')),
-    path('node/', include('node.urls')),  # node 앱의 URL 연결
-    path('users/', include('users.urls')),
-    path('controller/', include('controller.urls')),
-    path('search/', include('search.urls')), # search 앱의 URL을 포함
-    path('relations/', include('relation.urls')),  # relation 앱의 URL 연결
+    path('memos', include('memo.urls')),
+    path('node', include('node.urls')),  # node 앱의 URL 연결
+    path('users', include('users.urls')),
+    path('search', include('search.urls')), # search 앱의 URL을 포함
+    path('relations', include('relation.urls')),  # relation 앱의 URL 연결
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('redoc', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     # JWT 인증 관련 URL
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
 ]
