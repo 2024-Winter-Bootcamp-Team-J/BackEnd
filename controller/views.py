@@ -75,18 +75,6 @@ class ControllerView(APIView):
                             # 성공적으로 생성된 노드를 결과에 추가
                         nodes_result[group].append(node_data)
 
-                        # 최종 결과 반환
-                        return Response(
-                            {
-                                "message": "글 작성, 이름 추출, Node 및 메모 처리 완료",
-                                "write": serializer.data,
-                                "extracted_names": extracted_names,
-                                "nodes": nodes_result,
-                            },
-                            status=status.HTTP_201_CREATED,
-                        )
-
-
                     # 메모 생성
                     memo_serializer = MemoCreateSerializer(data={
                         "node": node_data["node_id"],
@@ -102,7 +90,6 @@ class ControllerView(APIView):
                             "name": name,
                         })
                         continue
-
 
                     nodes_result[group].append(node_data)
 
