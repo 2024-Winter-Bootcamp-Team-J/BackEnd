@@ -56,6 +56,7 @@ urlpatterns = [
     path('node', include('node.urls')),  # node 앱의 URL 연결
     path('users', include('users.urls')),
     path('search', include('search.urls')), # search 앱의 URL을 포함
+    path('controller', include('controller.urls')),
     path('relations', include('relation.urls')),  # relation 앱의 URL 연결
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
