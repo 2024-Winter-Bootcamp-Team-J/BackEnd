@@ -7,7 +7,11 @@ from .models import Write
 from .serializers import WriteSerializer
 from .name_extract_API import name_extract
 
-class ControllerView(APIView):
+class WriteCreateView(APIView):
+    def get(self, request):
+        writes = Write.objects.all()
+        serializer = WriteSerializer(writes, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         request_body=WriteSerializer,
