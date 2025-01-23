@@ -108,9 +108,3 @@ class ControllerView(APIView):
                     status=status.HTTP_201_CREATED,
                 )
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-def get(self, request):
-        writes = Write.objects.all()
-        serializer = WriteSerializer(writes, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
