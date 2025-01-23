@@ -17,6 +17,7 @@ services:
 
   nginx:
     image: gisu1102/2025techer:nginx
+    container_name: nginx
     volumes:
       - static_volume:/app/static
       - media_volume:/app/media
