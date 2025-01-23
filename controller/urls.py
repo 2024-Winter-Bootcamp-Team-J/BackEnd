@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import ControllerView
+from .views import WriteCreateView
 
 urlpatterns = [
-    path('', ControllerView.as_view(), name='write-create'),
+    path('writes/', WriteCreateView.as_view(), name='write-create'),
 ]
