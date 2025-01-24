@@ -17,9 +17,6 @@ class NodeImageUpdateSerializer(serializers.ModelSerializer):
         fields = ['node_id','node_img']
 
 
-
-
-
 # Node 전체 조회 시 응답 데이터를 처리하는 Serializer
 class NodeListResponseSerializer(serializers.ModelSerializer):
     class Meta:

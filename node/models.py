@@ -10,7 +10,6 @@ class Node(models.Model):
     node_img = models.TextField(null=True, blank=True)
 
 
-    # 커스텀 매니저 연결
 
     def __str__(self):
         return self.name
