@@ -103,6 +103,7 @@ services:
 volumes:
   static_volume:
   media_volume:
+  opensearch_data:
 
 networks:
   backend-network:
