@@ -47,7 +47,6 @@ services:
   # Celery 워커
   celery:
     container_name: celery_worker
-    build: .
     command: celery -A myCelery worker --loglevel=info
     depends_on:
       - rabbitmq
@@ -59,7 +58,6 @@ services:
   # Celery Beat (주기적 작업 실행)
   celery-beat:
     container_name: celery_beat
-    build: .
     command: celery -A myCelery beat --loglevel=info
     depends_on:
       - web
@@ -81,7 +79,24 @@ services:
     networks:
       - backend-network
 
-
+  opensearch:
+    image: opensearchproject/opensearch:2.4.0
+    container_name: opensearch
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
+    networks:
+      - backend-network
 
 volumes:
   static_volume:
