@@ -48,6 +48,8 @@ services:
   celery:
     image: gisu1102/2025techer:celery-worker
     container_name: celery_worker
+    env_file:
+      - .env
     command: celery -A myCelery worker --loglevel=info
     depends_on:
       - rabbitmq
@@ -60,6 +62,8 @@ services:
   celery-beat:
     image: gisu1102/2025techer:celery-beat
     container_name: celery_beat
+    env_file:
+      - .env
     command: celery -A myCelery beat --loglevel=info
     depends_on:
       - web
