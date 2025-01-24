@@ -16,11 +16,13 @@ click-repl==0.3.0
 colorama==0.4.6
 cron-descriptor==1.4.5
 dateutils==0.6.12
+Deprecated==1.2.15
 distro==1.9.0
 Django==4.2.18
 django-celery-beat==2.7.0
 django-celery-results==2.5.1
 django-cors-headers==4.6.0
+django-elasticsearch-dsl==8.0
 django-opensearch-dsl==0.6.2
 django-redis==5.4.0
 django-timezone-field==7.1
@@ -28,6 +30,8 @@ djangorestframework==3.15.1
 djangorestframework_simplejwt==5.4.0
 drf-yasg==1.21.8
 elastic-transport==8.17.0
+elasticsearch==8.17.0
+elasticsearch-dsl==8.17.1
 Events==0.5
 exceptiongroup==1.2.2
 h11==0.14.0
@@ -38,6 +42,7 @@ inflection==0.5.1
 jiter==0.8.2
 jmespath==1.0.1
 kombu==5.4.2
+limits==4.0.1
 openai==1.59.7
 opensearch-dsl==1.0.0
 opensearch-py==2.8.0
@@ -48,9 +53,12 @@ psycopg2-binary==2.9.10
 pydantic==2.10.5
 pydantic_core==2.27.2
 PyJWT==2.10.1
+pylogbeat==2.0.1
 python-crontab==3.2.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
+python-json-logger==3.2.1
+python-logstash-async==3.0.0
 pytz==2024.2
 PyYAML==6.0.2
 redis==5.2.1
@@ -68,4 +76,5 @@ vine==5.1.0
 wcwidth==0.2.13
 setuptools==75.8.0
 wheel==0.45.1
+wrapt==1.17.2
 gunicorn>=20.1.0,<21.0.0

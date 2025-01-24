@@ -1,15 +1,23 @@
 from rest_framework import serializers
 from .models import Node
+from django.contrib.auth import get_user_model
 
 # Node 생성 시 응답 데이터를 처리하는 Serializer
 class NodeCreateSerializer(serializers.ModelSerializer):
+    user = serializers.IntegerField(required=True)
     class Meta:
         model = Node
-        fields = ['name', 'node_img']  # 생성 시 필요한 필드
+        fields = ['node_id', 'name', 'user', 'node_img', 'created_at', 'is_deleted']  # 생성 시 필요한 필드
 
     def create(self, validated_data):
+        User = get_user_model()
+        try:
+            user_instance = User.objects.get(pk=validated_data.pop('user'))
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"user": "유효하지 않은 사용자 ID입니다."})
+
         # Node 객체를 생성하고 저장합니다.
-        node = Node.objects.create(**validated_data)
+        node = Node.objects.create(user=user_instance, **validated_data)
         # 생성된 Node 객체를 반환합니다.
         return node
 
@@ -18,7 +26,8 @@ class NodeCreateSerializer(serializers.ModelSerializer):
         return {
             "message": "Node created successfully",
             "data": {
-                "id": instance.node_id,
+                "node_id": instance.node_id,
+                "user": instance.user.user_id,
                 "name": instance.name,
                 "node_img": instance.node_img,
                 "is_deleted": instance.is_deleted,

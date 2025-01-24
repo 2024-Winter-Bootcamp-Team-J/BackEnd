@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'node', # node 앱 추가
     'relation', # relation 앱 추가
     'search',  # 'search' 앱 추가
-    "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
+    'controller',  # 'controller' 앱 추가
+    "django_opensearch_dsl",  # django_opensearch_dsl 앱 추가
     'django_celery_beat', # Celery Beat 앱 추가
     'django_celery_results', # Celery Results 앱 추가
 
@@ -61,10 +62,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 OPENSEARCH_DSL = {
     'default': {
-        'HOST': 'https://opensearch:9200',  # Docker Compose에서 설정한 서비스 이름
+        'HOST': 'https://opensearch:9200',
         'PORT': 9200,
-        'USE_SSL': True,  # SSL 사용 여부
-        'TIMEOUT': 30,  # 타임아웃 설정
+        'USE_SSL': True,
+        'TIMEOUT': 30,
+        'http_auth': ('admin', 'Link-in1234'),
     }
 }
 
@@ -76,7 +78,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'corsheaders.middleware.CorsMiddleware', # corsheaders 미들웨어 추가
 ]
 

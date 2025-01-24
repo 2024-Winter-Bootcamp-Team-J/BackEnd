@@ -11,7 +11,7 @@ app = Celery('backend')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # 모든 Django 앱에서 비동기 태스크를 로드
-app.autodiscover_tasks(['controller'])
+app.autodiscover_tasks()
 
 @app.task(bind=True)
 def debug_task(self):
