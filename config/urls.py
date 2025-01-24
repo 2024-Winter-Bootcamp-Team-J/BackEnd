@@ -40,6 +40,9 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
+
+    url='https://www.link-in.o-r.kr'  # Base URL 강제 설정
+
 )
 
 # Swagger에서 jwt 인증 관련
