@@ -8,7 +8,7 @@ services:
       - .env
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - ./logstash.conf:./logstash.conf
+      - logstash_volume:/code/logstash.conf
       - ./django_logs:/code/django_logs
       - static_volume:/code/static
       - media_volume:/code/media
@@ -127,9 +127,9 @@ services:
     image: opensearchproject/logstash-oss-with-opensearch-output-plugin:latest
     container_name: logstash
     volumes:
-      # web 컨테이너에서 `logstash.conf`를 참조하는 방식으로 변경
-      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      # 로컬에 저장한 django 로그를 logstash에 전달하기 위한 볼륨 매핑
+      - logstash_volume:/code/logstash.conf  # web 컨테이너의 /code 디렉토리를 logstash 컨테이너에서 참조
+      - /code/logstash.conf:/usr/share/logstash/pipeline/logstash.conf  # logstash.conf 마운트
+    # 로컬에 저장한 django 로그를 logstash에 전달하기 위한 볼륨 매핑
       - ./django_logs:/usr/share/logstash/logs
     networks:
       - backend-network
@@ -140,6 +140,7 @@ volumes:
   static_volume:
   media_volume:
   opensearch_data:
+  logstash_volume:
 
 networks:
   backend-network:
