@@ -119,8 +119,9 @@ class CreateUserNodeRelationView(APIView):
                 'user_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='유저 ID'),
                 'node_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='노드 ID'),
                 'is_canceled': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='관계가 취소되었는지 여부', default=False),
+                'relation_type_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='관계 타입 ID')
             },
-            required=['user_id', 'node_id']
+            required=['user_id', 'node_id','relation_type_id']
         ),
         responses={
             201: openapi.Response('생성된 데이터', UserNodeRelationSerializer),
