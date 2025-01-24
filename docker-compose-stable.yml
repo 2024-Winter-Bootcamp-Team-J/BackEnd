@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  web:
+    image: gisu1102/2025techer:web
+    container_name: web
+    env_file:
+      - .env
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/code/static
+      - media_volume:/code/media
+    ports:
+      - "8000:8000"
+    networks:
+      - backend-network
+
+  nginx:
+    image: gisu1102/2025techer:nginx
+    container_name: nginx
+    volumes:
+      - ./nginx_logs:/var/log/nginx
+      - static_volume:/code/static
+      - media_volume:/code/media
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - web
+    networks:
+      - backend-network
+
+volumes:
+  static_volume:
+  media_volume:
+
+networks:
+  backend-network:
+    driver: bridge
