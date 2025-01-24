@@ -118,7 +118,7 @@ services:
     environment:
       - OPENSEARCH_HOSTS=https://opensearch:9200
     networks:
-      - django-network
+      - backend-network
 
   # Logstash
   logstash:
@@ -129,7 +129,7 @@ services:
       # 로컬에 저장한 django 로그를 logstash에 전달하기 위한 볼륨 매핑
       - ./django_logs:/usr/share/logstash/logs
     networks:
-      - django-network
+      - backend-network
 
 volumes:
   static_volume:
