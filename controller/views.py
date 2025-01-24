@@ -8,7 +8,6 @@ from .models import Write
 from .serializers import WriteSerializer
 from .name_extract_API import name_extract
 from search.documents import NodeDocument
-from .tasks import example_task
 from node.models import Node
 from memo.models import Memo
 from node.serializers import NodeCreateSerializer
