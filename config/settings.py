@@ -98,7 +98,9 @@ TEMPLATES = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # 프론트엔드 도메인
+    "http://localhost:3000", # 프론트엔드 도메인
+    "http://www.link-in.o-r.kr",  # 요청이 발생하는 출처
+    "https://www.link-in.o-r.kr",  # HTTPS 요청 처리 시
 ]
 
 CORS_ALLOW_CREDENTIALS = True
