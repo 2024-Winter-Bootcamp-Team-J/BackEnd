@@ -52,8 +52,8 @@ INSTALLED_APPS = [
     'node', # node 앱 추가
     'relation', # relation 앱 추가
     'search',  # 'search' 앱 추가
-    'controller',
-    "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
+    'controller',  # 'controller' 앱 추가
+    "django_opensearch_dsl",  # django_opensearch_dsl 앱 추가
     'django_celery_beat', # Celery Beat 앱 추가
     'django_celery_results', # Celery Results 앱 추가
 ]
@@ -61,10 +61,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 OPENSEARCH_DSL = {
     'default': {
-        'HOST': 'http://opensearch:9200',  # Docker Compose에서 설정한 서비스 이름
+        'HOST': 'https://opensearch:9200',
         'PORT': 9200,
-        'USE_SSL': False,  # SSL 사용 여부
-        'TIMEOUT': 30,  # 타임아웃 설정
+        'USE_SSL': True,
+        'TIMEOUT': 30,
+        'http_auth': ('admin', 'Link-in1234'),
     }
 }
 
@@ -76,7 +77,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'corsheaders.middleware.CorsMiddleware', # corsheaders 미들웨어 추가
 ]
 
@@ -97,6 +97,64 @@ TEMPLATES = [
         },
     },
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'json': {  # 추가된 JSON 포맷터
+            'format': '{"timestamp": "%(asctime)s", "level": "%(levelname)s", "module": "%(module)s", "message": "%(message)s"}',
+            'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/app/django_logs/django.log',  # 로그 파일 경로
+            'formatter': 'json',  # JSON 포맷터를 사용
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.contrib.admin': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.core.cache': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.middleware': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # 프론트엔드 도메인
