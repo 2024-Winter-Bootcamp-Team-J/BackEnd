@@ -7,7 +7,7 @@ class NodeCreateSerializer(serializers.ModelSerializer):
     user = serializers.IntegerField(required=True)
     class Meta:
         model = Node
-        fields = ['node_id', 'name', 'user', 'node_img', 'created_at', 'is_deleted']  # 생성 시 필요한 필드
+        fields = ['name', 'user', 'node_img']  # 생성 시 필요한 필드
 
     def create(self, validated_data):
         User = get_user_model()
