@@ -67,6 +67,7 @@ jobs:
             -t gisu1102/2025techer:celery-beat \
             -f ./Dockerfile \
             ./  # Celery Beat Dockerfile 경로
+          
 
 
 

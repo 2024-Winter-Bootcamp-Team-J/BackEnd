@@ -49,7 +49,7 @@ services:
     build: .
     command: celery -A myCelery beat --loglevel=info
     volumes:
-      - .:/app
+      - .:/code
     depends_on:
       - web
       - rabbitmq
