@@ -96,7 +96,7 @@ services:
       - backend-network
 
   opensearch:
-    image: opensearchproject/opensearch:latest
+    image: opensearchproject/opensearch:2.4.0
     container_name: opensearch
     environment:
       - discovery.type=single-node
@@ -120,13 +120,12 @@ services:
 
 # OpenSearch 대시보드
   opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards:latest
+    image: opensearchproject/opensearch-dashboards:2.4.0
     container_name: opensearch-dashboards
     ports:
       - "5601:5601"
     environment:
       - OPENSEARCH_HOSTS=http://opensearch:9200
-      - opensearch.hosts=http://opensearch:9200
     networks:
       - backend-network
 
