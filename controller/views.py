@@ -60,18 +60,14 @@ class ControllerView(APIView):
                         if node_serializer.is_valid():  # 유효성 검사
                             node_create_result = node_serializer.save()  # 저장
                             node_data = node_serializer.to_representation(node_create_result)["data"]
-
-                            nodes_result[group].append(node_data)
-                            print(nodes_result)
                         else:
                             nodes_result[group].append({
                                 "error": "노드 생성 실패",
                                 "details": node_serializer.errors,
                                 "name": name,
                             })
-
-                            # 성공적으로 생성된 노드를 결과에 추가
-                    # nodes_result[group].append(node_data)
+                    # 성공적으로 생성된 노드를 결과에 추가
+                    nodes_result[group].append(node_data)
                     # 메모 생성
                     memo_serializer = MemoCreateSerializer(data={
                         "node": node_data.get("node_id"),
@@ -86,8 +82,6 @@ class ControllerView(APIView):
                             "name": name,
                         })
                         continue
-
-                    nodes_result[group].append(node_data)
 
                 # 결과 반환
                 return Response(
