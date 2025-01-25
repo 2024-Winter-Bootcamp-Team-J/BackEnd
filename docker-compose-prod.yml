@@ -126,8 +126,8 @@ services:
     environment:
       - OPENSEARCH_HOSTS=https://opensearch:9200
       #OpenSearch Dashboards가 /dashboards를 기본 경로로 인식
-      - SERVER_BASEPATH=/dashboards
-      - SERVER_REWRITEBASEPATH=true
+      #- SERVER_BASEPATH=/dashboards
+      #- SERVER_REWRITEBASEPATH=true
     networks:
       - backend-network
 
