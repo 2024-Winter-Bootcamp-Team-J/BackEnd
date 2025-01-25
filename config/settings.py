@@ -102,10 +102,6 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
-        },
         'json': {  # 추가된 JSON 포맷터
             'format': '{"timestamp": "%(asctime)s", "level": "%(levelname)s", "module": "%(module)s", "message": "%(message)s"}',
             'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
@@ -113,7 +109,7 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': '/app/django_logs/django.log',  # 로그 파일 경로
             'formatter': 'json',  # JSON 포맷터를 사용
