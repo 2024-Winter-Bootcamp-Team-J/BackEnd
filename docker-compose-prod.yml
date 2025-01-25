@@ -102,11 +102,12 @@ services:
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
-      - OPENSEARCH_HTTP_ENABLE_SSL=false  # SSL 비활성화
       - opensearch.ssl.enabled=false
       - opensearch.ssl.verificationMode=none
       - opensearch.network.host=0.0.0.0
       - opensearch.http.port=9200
+      - opensearch.ssl.transport.enabled= false
+      - opensearch.ssl.http.enabled= false
 
     ulimits:
       memlock:
