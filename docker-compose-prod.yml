@@ -125,9 +125,7 @@ services:
       - "5601:5601"
     environment:
       - OPENSEARCH_HOSTS=https://opensearch:9200
-      - OPENSEARCH_DASHBOARDS_SECURITY_ENABLED=true
-      - OPENSEARCH_DASHBOARDS_SECURITY_AUTH_ANONYMOUS_ENABLED=false  # 기본값 false
-      - OPENSEARCH_DASHBOARDS_SERVER_BASEPATH=/dashboards
+
     networks:
       - backend-network
 
