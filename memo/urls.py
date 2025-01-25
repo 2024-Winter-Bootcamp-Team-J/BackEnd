@@ -3,6 +3,6 @@ from .views import MemoCreateView, MemoRetrieveView, MemoListByUserView  # MemoC
 
 urlpatterns = [
     path('', MemoCreateView.as_view(), name='memo-create'),  # 메모 생성
-    path('memo/<int:pk>', MemoRetrieveView.as_view(), name='memo-detail'),  # 특정 메모 조회
-    path('withusermemo/<int:node_id>', MemoListByUserView.as_view(), name='node-memo-retrieve'),
+    path('/<int:pk>', MemoRetrieveView.as_view(), name='memo-detail'),  # 특정 메모 조회
+    path('/memoListByUser/<int:node_id>', MemoListByUserView.as_view(), name='node-memo-retrieve'),
 ]
