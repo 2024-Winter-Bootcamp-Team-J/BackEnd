@@ -22,6 +22,7 @@ class UserNodeRelation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     canceled_at = models.DateTimeField(null=True, blank=True)
     is_canceled = models.BooleanField(default=False)
+    relation_type_id = models.ForeignKey(RelationType, on_delete=models.CASCADE)
 
 
     def __str__(self):
