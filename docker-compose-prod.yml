@@ -101,8 +101,13 @@ services:
     environment:
       - discovery.type=single-node
       - bootstrap.memory_lock=true
-      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
       - OPENSEARCH_HTTP_ENABLE_SSL=false  # SSL 비활성화
+      - opensearch.ssl.enabled=false
+      - opensearch.ssl.verificationMode=none
+      - opensearch.network.host=0.0.0.0
+      - opensearch.http.port=9200
+
     ulimits:
       memlock:
         soft: -1
@@ -124,6 +129,7 @@ services:
       - "5601:5601"
     environment:
       - OPENSEARCH_HOSTS=http://opensearch:9200
+      - opensearch.ssl.verificationMode=none
     networks:
       - backend-network
 
