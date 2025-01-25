@@ -281,10 +281,11 @@ CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-
+'''
 CELERY_BEAT_SCHEDULE = {
     'example-task': {
         'task': 'myapp.tasks.example_task',
         'schedule': crontab(minute='*/1'),  # 매 1분마다 실행
     },
 }
+'''
