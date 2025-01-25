@@ -101,13 +101,8 @@ services:
     environment:
       - discovery.type=single-node
       - bootstrap.memory_lock=true
-      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
-      - opensearch.ssl.enabled=false
-      - opensearch.ssl.verificationMode=none
-      - opensearch.network.host=0.0.0.0
-      - opensearch.http.port=9200
-      - opensearch.ssl.transport.enabled= false
-      - opensearch.ssl.http.enabled= false
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=Link-in1234
 
     ulimits:
       memlock:
@@ -130,7 +125,6 @@ services:
       - "5601:5601"
     environment:
       - OPENSEARCH_HOSTS=http://opensearch:9200
-      - opensearch.ssl.verificationMode=none
     networks:
       - backend-network
 
