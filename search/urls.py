@@ -1,8 +1,6 @@
 from django.urls import path
-from .views import MemoSearchView
-from .views import NodeSearchView
+from .views import SearchView
 
 urlpatterns = [
-    path('search/memosearch', MemoSearchView.as_view(), name='search'),
-    path('search/nodesearch', NodeSearchView.as_view(), name='search_nodes'),
+    path('', SearchView.as_view(), name='search_nodes'),
 ]
