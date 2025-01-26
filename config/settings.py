@@ -18,10 +18,12 @@ from celery.schedules import crontab
 
 load_dotenv()
 
+# Prometheus URL 설정
+PROMETHEUS_URL = os.getenv('PROMETHEUS_URL', 'http://prometheus:9090')  # 기본값 설정
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -284,14 +286,14 @@ CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-
+'''
 CELERY_BEAT_SCHEDULE = {
     'example-task': {
         'task': 'myapp.tasks.example_task',
         'schedule': crontab(minute='*/1'),  # 매 1분마다 실행
     },
 }
-
+'''
 
 
 # 정적 파일 설정
