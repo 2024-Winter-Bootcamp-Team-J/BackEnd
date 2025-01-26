@@ -25,4 +25,4 @@ class RelationToTypeSerializer(serializers.ModelSerializer):
 class UserNodeRelationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserNodeRelation
-        fields = ('user_node_id', 'user_id', 'node_id', 'is_canceled', 'created_at')
+        fields = ('user_node_id', 'user_id', 'node_id', 'is_canceled', 'created_at', 'relation_type_id')

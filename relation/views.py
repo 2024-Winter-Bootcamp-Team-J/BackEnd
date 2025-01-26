@@ -132,10 +132,11 @@ class CreateUserNodeRelationView(APIView):
         user_id = request.data.get('user_id')
         node_id = request.data.get('node_id')
         is_canceled = request.data.get('is_canceled', False)
-
+        relation_type_id = request.data.get('relation_type_id')
         try:
             user = User.objects.get(user_id=user_id)
             node = Node.objects.get(node_id=node_id)
+            relation_type = RelationType.objects.get(relation_type_id=relation_type_id)
         except User.DoesNotExist:
             return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
         except Node.DoesNotExist:
@@ -144,7 +145,8 @@ class CreateUserNodeRelationView(APIView):
         user_node_relation = UserNodeRelation.objects.create(
             user_id=user,
             node_id=node,
-            is_canceled=is_canceled
+            is_canceled=is_canceled,
+            relation_type_id = relation_type
         )
         serializer = UserNodeRelationSerializer(user_node_relation)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
