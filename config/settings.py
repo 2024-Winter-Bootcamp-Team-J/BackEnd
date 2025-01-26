@@ -82,7 +82,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',  # 메시지 처리
     'django.middleware.clickjacking.XFrameOptionsMiddleware',  # XFrame 옵션
 ]
-
+X_FRAME_OPTIONS = 'ALLOWALL'
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
