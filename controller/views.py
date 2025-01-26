@@ -56,7 +56,7 @@ class ControllerView(APIView):
                         print(node_data)
                     else:
                         node_serializer = NodeCreateSerializer(
-                            data={"name": name, "user": write.user.pk, "node_img": None})
+                            data={"name": name, "user_id": write.user.pk})
                         if node_serializer.is_valid():  # 유효성 검사
                             node_create_result = node_serializer.save()  # 저장
                             node_data = node_serializer.to_representation(node_create_result)["data"]

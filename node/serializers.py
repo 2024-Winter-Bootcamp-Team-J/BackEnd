@@ -5,7 +5,7 @@ from relation.models import UserNodeRelation
 
 # Node 생성 시 응답 데이터를 처리하는 Serializer
 class NodeCreateSerializer(serializers.ModelSerializer):
-    user_id = serializers.IntegerField( required=False)  # user_id만 사용
+    user_id = serializers.IntegerField(required=True)  # user_id만 사용
     class Meta:
         model = Node
         fields = ['name', 'user_id']  # user_id만 반환
@@ -19,7 +19,6 @@ class NodeCreateSerializer(serializers.ModelSerializer):
                 user = User.objects.get(user_id=user_id)
             except User.DoesNotExist:
                 raise serializers.ValidationError("Invalid user_id provided.")
-
         # Node 객체 생성 시 user 객체를 연결
         node = Node.objects.create(
             name=validated_data['name'],
