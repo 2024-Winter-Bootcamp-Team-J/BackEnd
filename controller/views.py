@@ -68,11 +68,12 @@ class ControllerView(APIView):
                                     "name": name,
                                 })
                     except Exception as e:
-                        print(f"에러 발생: {e}")
+                        print(f"첫 검색이면 들어오는 except")
                         node_serializer = NodeCreateSerializer(
                                 data={"name": name, "user_id": write.user.pk})
                         if node_serializer.is_valid():  # 유효성 검사
                             node_create_result = node_serializer.save()  # 저장
+                            print(node_serializer.to_representation(node_create_result))
                             node_data = node_serializer.to_representation(node_create_result)["data"]
                         else:
                             nodes_result[group].append({
@@ -80,9 +81,9 @@ class ControllerView(APIView):
                                 "details": node_serializer.errors,
                                 "name": name,
                             })
+                    
                     # 성공적으로 생성된 노드를 결과에 추가
                     nodes_result[group].append(node_data)
-                    print(f'nodes_result: {nodes_result}')
 
                     # 메모 생성
                     memo_serializer = MemoCreateSerializer(data={

@@ -24,8 +24,21 @@ class NodeCreateSerializer(serializers.ModelSerializer):
             name=validated_data['name'],
             user=user  # user 객체 할당
         )
-
         return node
+    
+    def to_representation(self, instance):
+        # 응답 데이터 포맷을 정의합니다.
+        return {
+            "message": "Node created successfully",
+            "data": {
+                "node_id": instance.node_id,
+                "user": instance.user.user_id,
+                "name": instance.name,
+                "node_img": instance.node_img,
+                "is_deleted": instance.is_deleted,
+                "created_at": instance.created_at.strftime('%Y-%m-%dT%H:%M:%SZ'),
+            }
+        }
 
 # Node 이미지 추가 시 데이터를 처리하는 Serializer
 class NodeImageUpdateSerializer(serializers.ModelSerializer):
