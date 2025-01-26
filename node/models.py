@@ -1,9 +1,12 @@
 from django.db import models
 from django.conf import settings
 
+from users.models import User
+
+
 class Node(models.Model):
     node_id = models.BigAutoField(primary_key=True)  # Primary Key로 BigInt 타입
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='nodes',null=False)
     name = models.CharField(max_length=50)  # 이름, 최대 길이 50
     created_at = models.DateTimeField(auto_now_add=True)  # 생성 시각, 자동 생성
     is_deleted = models.BooleanField(default=False)  # 삭제 여부 (기본값: False)
