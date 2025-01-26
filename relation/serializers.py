@@ -1,9 +1,7 @@
 from rest_framework import serializers
 from .models import RelationType, NodeRelation, RelationToType, UserNodeRelation
 
-
 # serializers.py
-
 class RelationTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = RelationType

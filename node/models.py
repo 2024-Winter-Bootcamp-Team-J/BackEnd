@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-
 from users.models import User
 
 
@@ -11,7 +10,9 @@ class Node(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # 생성 시각, 자동 생성
     is_deleted = models.BooleanField(default=False)  # 삭제 여부 (기본값: False)
     deleted_at = models.DateTimeField(null=True, blank=True)  # 삭제 시각 (Null 가능)
-    node_img = models.URLField(max_length=255, null=True, blank=True) # 이미지 링크 (최대 길이 255)
+    # S3에 저장될 이미지 필드로 변경
+    node_img = models.TextField(null=True, blank=True)
+
 
     def __str__(self):
         return self.name
