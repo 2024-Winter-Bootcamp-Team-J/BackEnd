@@ -68,11 +68,9 @@ class NodeImageUpdateView(APIView):
                 node_img = request.FILES.get('node_img')
 
                 if node_img:
-                    print(111111)
                     bucket_name = settings.AWS_STORAGE_BUCKET_NAME
                     file_name = f"nodes/{node_img.name}"
                     node_img_url = upload_to_s3(node_img, bucket_name,file_name)
-                    print(node_img_url)
                 else:
                     node_img_url = None
 
