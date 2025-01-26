@@ -73,14 +73,14 @@ OPENSEARCH_DSL = {
 }
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware', # corsheaders 미들웨어 추가
+    'django.middleware.security.SecurityMiddleware',  # 보안 관련 설정
+    'corsheaders.middleware.CorsMiddleware',  # CORS 설정
+    'django.contrib.sessions.middleware.SessionMiddleware',  # 세션 관리
+    'django.middleware.common.CommonMiddleware',  # 기본적인 공통 미들웨어
+    'django.middleware.csrf.CsrfViewMiddleware',  # CSRF 보호
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # 인증 처리
+    'django.contrib.messages.middleware.MessageMiddleware',  # 메시지 처리
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',  # XFrame 옵션
 ]
 
 ROOT_URLCONF = 'config.urls'
