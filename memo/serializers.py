@@ -82,3 +82,18 @@ class MemoRetrieveView(APIView):
         except Memo.DoesNotExist:
             # 메모가 존재하지 않을 경우 처리합니다.
             return Response({'error': 'Memo not found'}, status=404)  # HTTP 404 Not Found
+
+class NodeMemoRetrieveSerializer(serializers.Serializer):
+    """
+    메모 조회 요청에 대한 응답 데이터를 처리하는 Serializer입니다.
+    """
+    memo_id = serializers.IntegerField()
+    content = serializers.CharField()  # 메모 내용
+    created_at = serializers.DateTimeField(
+        format="%Y-%m-%d-%H-%M-%S"
+    )  # 생성 시각('yyyy-mm-dd-hh-mm-ss' 형식)
+    node = serializers.SerializerMethodField()  # node 세부 정보 반환
+
+    def get_node(self, obj):
+        return {"id": obj.node.node_id}  # node 객체의 특정 필드 반환
+
