@@ -19,7 +19,6 @@ class NodeCreateSerializer(serializers.ModelSerializer):
                 user = User.objects.get(user_id=user_id)
             except User.DoesNotExist:
                 raise serializers.ValidationError("Invalid user_id provided.")
-        print(f'NodeCreateSerializer로그 name:{name}, user:{user}')
         # Node 객체 생성 시 user 객체를 연결
         node = Node.objects.create(
             name=validated_data['name'],
