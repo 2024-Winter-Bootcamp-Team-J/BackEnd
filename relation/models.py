@@ -7,7 +7,13 @@ class RelationType(models.Model):
     관계 타입을 나타내는 모델.
     """
     relation_type_id = models.BigAutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='relation_types')
+    user_id = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='relation_types',
+        null=True,
+        blank=True  # user_id를 nullable로 설정
+    )
     name = models.CharField(max_length=50)
     is_default = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
