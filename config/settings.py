@@ -64,7 +64,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 OPENSEARCH_DSL = {
     'default': {
-        'HOST': 'https://opensearch:9200',
+        'HOST': 'http://opensearch:9200',
         'PORT': 9200,
         'USE_SSL': True,
         'TIMEOUT': 30,
