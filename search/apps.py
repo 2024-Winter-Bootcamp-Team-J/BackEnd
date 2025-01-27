@@ -11,6 +11,6 @@ class SearchConfig(AppConfig):
         alias="default",  # 기본 alias
         hosts=["https://opensearch:9200"],  # OpenSearch 클러스터 호스트
         http_auth=("admin", "Link-in1234"),  # 인증 정보
-        use_ssl=False,
+        use_ssl=True,
         verify_certs=False
         )

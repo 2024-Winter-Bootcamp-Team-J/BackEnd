@@ -66,7 +66,7 @@ OPENSEARCH_DSL = {
     'default': {
         'HOST': 'https://opensearch:9200',
         'PORT': 9200,
-        'USE_SSL': False,
+        'USE_SSL': True,
         'TIMEOUT': 30,
         'http_auth': ('admin', 'Link-in1234'),
     }
