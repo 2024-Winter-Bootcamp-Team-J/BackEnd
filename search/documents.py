@@ -22,12 +22,6 @@ class MemoDocument(Document):
             'deleted_at',
         ]
 
-    # 메모 검색을 위한 메소드
-    @classmethod
-    def search_memo(cls, query):
-        # content 필드에 대해 full-text search
-        return cls.search().filter('match', content=query)
-
 class NodeDocument(Document):
     class Index:
         name = 'node'
@@ -45,8 +39,3 @@ class NodeDocument(Document):
             'deleted_at',
             'node_img',
         ]
-    # 노드 검색을 위한 메소드
-    @classmethod
-    def search_node(cls, query):
-        # content 필드에 대해 full-text search
-        return cls.search().filter('match', name=query)
