@@ -129,7 +129,6 @@ services:
       OPENSEARCH_HOSTS: '["http://opensearch:9200"]'
       SERVER_BASEPATH: "/dashboards"
       SERVER_REWRITEBASEPATH: "true"
-      OPENSEARCH_SECURITY_ENABLED: "true"   # 보안 활성화
       OPENSEARCH_USERNAME: "admin"          # 기본 관리자 계정
       OPENSEARCH_PASSWORD: "Link-in1234"   # 관리자 비밀번호
     networks:
