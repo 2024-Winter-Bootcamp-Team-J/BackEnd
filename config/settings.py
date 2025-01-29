@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-
 from dotenv import load_dotenv
 from datetime import timedelta
 from celery.schedules import crontab
@@ -58,6 +57,7 @@ INSTALLED_APPS = [
     "django_opensearch_dsl",  # django_opensearch_dsl 앱 추가
     'django_celery_beat', # Celery Beat 앱 추가
     'django_celery_results', # Celery Results 앱 추가
+    'corsheaders',  # CORS 관련 앱 추가
     "django_prometheus"
 ]
 CORS_ALLOW_ALL_ORIGINS = True

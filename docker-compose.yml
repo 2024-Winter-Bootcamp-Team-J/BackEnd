@@ -173,6 +173,17 @@ services:
     depends_on:
       - prometheus  # Prometheus 실행 후 시작
 
+  # Node Exporter 서비스 (시스템 메트릭 수집)
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    ports:
+      - "9100:9100"  # node-exporter 웹 UI 접근 포트
+    networks:
+      - django-network
+    depends_on:
+      - prometheus  # Prometheus 실행 후 시작
+
 volumes:
   db_data:
   opensearch_data:
