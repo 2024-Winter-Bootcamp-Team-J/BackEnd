@@ -41,7 +41,7 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=(permissions.AllowAny,),
 
-    url='https://www.link-in.site'  # Base URL 강제 설정
+    url='https://api.link-in.site'  # Base URL 강제 설정
 
 )
 
