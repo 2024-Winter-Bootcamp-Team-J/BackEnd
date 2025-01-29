@@ -254,7 +254,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),  # Access Token 유효기간
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=80),  # Access Token 유효기간
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh Token 유효기간
     'ROTATE_REFRESH_TOKENS': True,                  # Refresh Token 재발급 시 새로 발급
     'BLACKLIST_AFTER_ROTATION': True,               # 이전 Refresh Token 블랙리스트 처리
