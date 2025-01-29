@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     'django_celery_results', # Celery Results 앱 추가
 
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+
 
 OPENSEARCH_DSL = {
     'default': {
@@ -73,8 +73,8 @@ OPENSEARCH_DSL = {
 }
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',  # 보안 관련 설정
     'corsheaders.middleware.CorsMiddleware',  # CORS 설정
+    'django.middleware.security.SecurityMiddleware',  # 보안 관련 설정
     'django.contrib.sessions.middleware.SessionMiddleware',  # 세션 관리
     'django.middleware.common.CommonMiddleware',  # 기본적인 공통 미들웨어
     'django.middleware.csrf.CsrfViewMiddleware',  # CSRF 보호
@@ -151,7 +151,6 @@ LOGGING = {
         },
     },
 }
-
 
 
 
