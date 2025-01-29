@@ -157,8 +157,10 @@ LOGGING = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000", # 프론트엔드 도메인
-    "http://www.link-in.o-r.kr",  # 요청이 발생하는 출처
-    "https://www.link-in.o-r.kr",  # HTTPS 요청 처리 시
+    "http://www.link-in.site",  # 요청이 발생하는 출처
+    "https://www.link-in.site", # HTTPS 요청 처리 시
+    "https://api.link-in.site",
+    "http://api.link-in.site"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
