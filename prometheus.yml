@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 15s  # 데이터를 수집하는 기본 간격
+  evaluation_interval: 15s  # 규칙을 평가하는 간격
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']  # Prometheus 자체를 모니터링
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']  # cAdvisor 데이터를 수집
+
+  - job_name: 'django'
+    metrics_path: /metrics/  # 메트릭 경로 추가
+    static_configs:
+      - targets: [ 'django_web:8000' ]
