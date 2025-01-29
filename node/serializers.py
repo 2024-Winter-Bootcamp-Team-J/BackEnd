@@ -53,10 +53,11 @@ class NodeImageUpdateSerializer(serializers.ModelSerializer):
 # Node 전체 조회 시 응답 데이터를 처리하는 Serializer
 class NodeListResponseSerializer(serializers.ModelSerializer):
     relation_type_ids = serializers.SerializerMethodField()  # 동적 필드를 위한 SerializerMethodField 사용
+    user_id = serializers.IntegerField(required=False)
 
     class Meta:
         model = Node
-        fields = ['node_id', 'name', 'node_img', 'is_deleted', 'created_at', 'relation_type_ids']
+        fields = ['node_id', 'name', 'node_img', 'is_deleted', 'created_at', 'relation_type_ids','user_id']
 
     def get_relation_type_ids(self, node):
         # UserNodeRelation에서 user_node_id 조회
