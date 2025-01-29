@@ -1,1 +1,21 @@
-{"prompt"}
+{"messages": [{"role": "user", "content": "삼촌과 여행을 갔다"}, {"role": "assistant", "content": "{\"category\": [\"가족\"]}"}]}
+{"messages": [{"role": "user", "content": "동생과 여행을 갔다"}, {"role": "assistant", "content": "{\"category\": [\"가족\"]}"}]}
+{"messages": [{"role": "user", "content": "엄마랑 쇼핑을 갔다"}, {"role": "assistant", "content": "{\"category\": [\"가족\"]}"}]}
+{"messages": [{"role": "user", "content": "어머니와 쇼핑을 갔다"}, {"role": "assistant", "content": "{\"category\": [\"가족\"]}"}]}
+{"messages": [{"role": "user", "content": "삼촌과 여행을 갔다"}, {"role": "assistant", "content": "{\"category\": [\"가족\"]}"}]}
+{"messages": [{"role": "user", "content": "형과 게임을 했다"}, {"role": "assistant", "content": "{\"category\": [\"가족\", \"게임\"]}"}]}
+{"messages": [{"role": "user", "content": "동생과 여행을 갔다"}, {"role": "assistant", "content": "{\"category\": [\"가족\"]}"}]}
+{"messages": [{"role": "user", "content": "대학 축제에서 우민이랑 만났다"}, {"role": "assistant", "content": "{\"category\": [\"대학동기\"]}"}]}
+{"messages": [{"role": "user", "content": "윤서랑 전공 강의를 들었다"}, {"role": "assistant", "content": "{\"category\": [\"대학동기\"]}"}]}
+{"messages": [{"role": "user", "content": "기수랑 같이 공부했다"}, {"role": "assistant", "content": "{\"category\": [\"대학동기\"]}"}]}
+{"messages": [{"role": "user", "content": "김선호 교수님이 밥을 사주셨다"}, {"role": "assistant", "content": "{\"category\": [\"지인\"]}"}]}
+{"messages": [{"role": "user", "content": "저번 술자리에서 봤던 지민이를 우연히 만났다"}, {"role": "assistant", "content": "{\"category\": [\"지인\"]}"}]}
+{"messages": [{"role": "user", "content": "연규랑 롤을 했다"}, {"role": "assistant", "content": "{\"category\": [\"게임\"]}"}]}
+{"messages": [{"role": "user", "content": "기수랑 같이 게임을 했다"}, {"role": "assistant", "content": "{\"category\": [\"게임\"]}"}]}
+{"messages": [{"role": "user", "content": "윤서랑 홍대에 가서 밥을 먹었다"}, {"role": "assistant", "content": "{\"category\": [\"친구\"]}"}]}
+{"messages": [{"role": "user", "content": "운서랑 스키장에 갔다"}, {"role": "assistant", "content": "{\"category\": [\"친구\"]}"}]}
+{"messages": [{"role": "user", "content": "우민이랑 밥을 먹었다"}, {"role": "assistant", "content": "{\"category\": [\"친구\"]}"}]}
+{"messages": [{"role": "user", "content": "우민이랑 같이 영화를 봤다"}, {"role": "assistant", "content": "{\"category\": [\"친구\"]}"}]}
+{"messages": [{"role": "user", "content": "최우민 대리님과 출장을 갔다"}, {"role": "assistant", "content": "{\"category\": [\"직장\"]}"}]}
+{"messages": [{"role": "user", "content": "김기수 과장님, 이연규 부장님과 회의를 했다"}, {"role": "assistant", "content": "{\"category\": [\"직장\"]}"}]}
+{"messages": [{"role": "user", "content": "앤드류 부장님과 면담을 했다"}, {"role": "assistant", "content": "{\"category\": [\"직장\"]}"}]}

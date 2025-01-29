@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     'search',  # 'search' 앱 추가
     'controller',  # 'controller' 앱 추가
     "django_opensearch_dsl",  # django_opensearch_dsl 앱 추가
-    'django_celery_beat', # Celery Beat 앱 추가
     'django_celery_results', # Celery Results 앱 추가
 ]
 CORS_ALLOW_ALL_ORIGINS = True
@@ -281,14 +280,3 @@ SWAGGER_SETTINGS = {
 # Celery setttings  
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-'''
-CELERY_BEAT_SCHEDULE = {
-    'example-task': {
-        'task': 'myapp.tasks.example_task',
-        'schedule': crontab(minute='*/1'),  # 매 1분마다 실행
-    },
-}
-'''
