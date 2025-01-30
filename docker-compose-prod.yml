@@ -66,21 +66,6 @@ services:
     networks:
       - backend-network
 
-  # Celery Beat (주기적 작업 실행)
-  celery-beat:
-    image: gisu1102/2025techer:celery-beat
-    container_name: celery_beat
-    env_file:
-      - .prod.env
-    volumes:
-      - ./django_logs:/code/django_logs
-    command: celery -A myCelery beat --loglevel=info
-    depends_on:
-      - web
-      - rabbitmq
-      - celery
-    networks:
-      - backend-network
 
   # RabbitMQ 서비스
   rabbitmq:

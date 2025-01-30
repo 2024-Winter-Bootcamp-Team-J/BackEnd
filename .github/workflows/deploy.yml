@@ -98,10 +98,10 @@ jobs:
               sudo chmod +x /usr/local/bin/docker-compose
             fi
             
-            # .env 파일을 GitHub Secrets에서 가져와서 EC2에 복사
+            # .prod.env 파일을 GitHub Secrets에서 가져와서 EC2에 복사
             echo "Decoding .env file from GitHub Secrets..."
-            echo "${{ secrets.MY_ENV_FILE }}" | base64 --decode > .env || { echo "Base64 decode failed"; exit 1; }
-            echo ".env file decoded successfully"
+            echo "${{ secrets.MY_ENV_FILE }}" | base64 --decode > .prod.env || { echo "Base64 decode failed"; exit 1; }
+            echo "prod.env file decoded successfully"
             
             
           
