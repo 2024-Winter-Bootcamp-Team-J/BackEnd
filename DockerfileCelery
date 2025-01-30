@@ -17,7 +17,7 @@ RUN pip install --upgrade pip \
 COPY . /code/
 
 # entrypoint.sh 복사 및 실행 권한 추가
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY ./CeleryEntrypoint.sh /CeleryEntrypoint.sh
+RUN chmod +x /CeleryEntrypoint.sh
 # entrypoint.sh를 엔트리포인트로 설정
 ENTRYPOINT ["/CeleryEntrypoint.sh"]
