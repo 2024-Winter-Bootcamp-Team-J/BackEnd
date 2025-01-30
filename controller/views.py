@@ -19,7 +19,6 @@ import os
 import json
 
 
-
 class ControllerView(APIView):
 
     @swagger_auto_schema(
@@ -62,7 +61,7 @@ class ControllerView(APIView):
                             print(node_data)
                         else:
                             node_serializer = NodeCreateSerializer(
-                                data={"name_id": name, "user_id": write.user.pk})
+                                data={"name": name, "user_id": write.user.pk})
                             if node_serializer.is_valid():  # 유효성 검사
                                 node_create_result = node_serializer.save()  # 저장
                                 node_data = node_serializer.to_representation(node_create_result)["data"]
@@ -75,7 +74,7 @@ class ControllerView(APIView):
                     except Exception as e:
                         print(f"첫 검색이면 들어오는 except")
                         node_serializer = NodeCreateSerializer(
-                                data={"name": name, "user_id": write.user.pk})
+                            data={"name": name, "user_id": write.user.pk})
                         if node_serializer.is_valid():  # 유효성 검사
                             node_create_result = node_serializer.save()  # 저장
                             print(node_serializer.to_representation(node_create_result))
@@ -86,7 +85,7 @@ class ControllerView(APIView):
                                 "details": node_serializer.errors,
                                 "name": name,
                             })
-                    
+
                     # 성공적으로 생성된 노드를 결과에 추가
                     nodes_result[group].append(node_data)
 
@@ -104,6 +103,7 @@ class ControllerView(APIView):
                             "name": name,
                         })
                         continue
+            try:
                 type_name = category.get()['category']
                 print(f'type_name: {type_name}')
                 type_id = RelationType.objects.filter(name=type_name[0]).values("relation_type_id")[0]
@@ -114,11 +114,12 @@ class ControllerView(APIView):
                         "write": serializer.data,
                         "extracted_names": extracted_names,
                         "nodes": nodes_result,
-                        "category" : [json.loads('{"type_name": "' + type_name[0] + '"}'), type_id]
+                        "category": [json.loads('{"type_name": "' + type_name[0] + '"}'), type_id]
                     },
                     status=status.HTTP_201_CREATED,
                 )
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except Exception:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
         writes = Write.objects.all()
