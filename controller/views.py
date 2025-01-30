@@ -71,7 +71,7 @@ class ControllerView(APIView):
                                     "name": name,
                                 })
                                 print("노드생성 실패 오류")
-                                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                                return Response({"error": "노드생성 실패"}, status=status.HTTP_400_BAD_REQUEST)
                     except Exception as e:
                         print(f"첫 검색이면 들어오는 except")
                         node_serializer = NodeCreateSerializer(
@@ -87,7 +87,7 @@ class ControllerView(APIView):
                                 "name": name,
                             })
                             print("노드생성 실패 오류")
-                            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                            return Response({"error": "노드생성 실패"}, status=status.HTTP_400_BAD_REQUEST)
                     
                     # 성공적으로 생성된 노드를 결과에 추가
                     nodes_result[group].append(node_data)
@@ -106,7 +106,7 @@ class ControllerView(APIView):
                             "name": name,
                         })
                         print("메모생성 실패 오류")
-                        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({"error": "메모생성 실패"}, status=status.HTTP_400_BAD_REQUEST)
             try:
                 type_results = []
                 type_names = category.get()['category']
@@ -128,10 +128,10 @@ class ControllerView(APIView):
                 )
             except Exception as e:
                 print(f"노드 메모 저장 후 에러: {e}")
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "노드메모 저장 후 오류"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             print("리퀘스트가 유효하지 않음")
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "리퀘스트가 유효하지 않음"}, status=status.HTTP_400_BAD_REQUEST)
     def get(self, request):
         writes = Write.objects.all()
         serializer = WriteSerializer(writes, many=True)
