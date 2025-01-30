@@ -40,7 +40,6 @@ class ControllerView(APIView):
                     {"error": f"이름 추출 실패: {str(e)}"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-
             # 그룹(이벤트)별 node 검색 및 생성
             nodes_result = {}
             node_data = {}
@@ -70,6 +69,8 @@ class ControllerView(APIView):
                                     "details": node_serializer.errors,
                                     "name": name,
                                 })
+                                print("노드생성 실패 오류")
+                                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                     except Exception as e:
                         print(f"첫 검색이면 들어오는 except")
                         node_serializer = NodeCreateSerializer(
@@ -84,6 +85,8 @@ class ControllerView(APIView):
                                 "details": node_serializer.errors,
                                 "name": name,
                             })
+                            print("노드생성 실패 오류")
+                            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                     
                     # 성공적으로 생성된 노드를 결과에 추가
                     nodes_result[group].append(node_data)
@@ -101,7 +104,8 @@ class ControllerView(APIView):
                             "details": memo_serializer.errors,
                             "name": name,
                         })
-                        continue
+                        print("메모생성 실패 오류")
+                        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             try:
                 type_results = []
                 type_names = category.get()['category']
@@ -122,9 +126,11 @@ class ControllerView(APIView):
                     status=status.HTTP_201_CREATED,
                 )
             except Exception as e:
-                print(f"에러: {e}")
+                print(f"노드 메모 저장 후 에러: {e}")
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        else:
+            print("리퀘스트가 유효하지 않음")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     def get(self, request):
         writes = Write.objects.all()
         serializer = WriteSerializer(writes, many=True)
