@@ -33,27 +33,13 @@ services:
   celery:
     container_name: celery_worker
     build: .
-    command: celery -A myCelery worker --loglevel=info
+    command: celery -A config worker --loglevel=info
     volumes:
       - .:/app
     depends_on:
       - rabbitmq
       - web
       - redis
-    networks:
-      - django-network
-
-  # Celery Beat (주기적 작업 실행)
-  celery-beat:
-    container_name: celery-beat
-    build: .
-    command: celery -A myCelery beat --loglevel=info
-    volumes:
-      - .:/app
-    depends_on:
-      - web
-      - rabbitmq
-      - celery
     networks:
       - django-network
 
@@ -118,6 +104,8 @@ services:
       - .:/code
       # docker에서 실행되는 django의 로그를 로컬에 저장하기 위한 볼륨 매핑
       - ./django_logs:/app/django_logs
+      # fine_tuning을 위한 jsonl 파일
+      - ./controller/category.jsonl:/app/controller/category.jsonl
     ports:
       - "8000:8000"
     depends_on:
