@@ -18,8 +18,6 @@ import requests
 import os
 import json
 
-
-
 class ControllerView(APIView):
 
     @swagger_auto_schema(
@@ -104,9 +102,14 @@ class ControllerView(APIView):
                             "name": name,
                         })
                         continue
-                type_name = category.get()['category']
-                print(f'type_name: {type_name}')
-                type_id = RelationType.objects.filter(name=type_name[0]).values("relation_type_id")[0]
+            try:
+                type_results = []
+                type_names = category.get()['category']
+                for type_name in type_names:
+                    print(f'type_name: {type_name}')
+                    type_id = RelationType.objects.filter(name=type_name).values("relation_type_id")[0]
+                    print(f'type_id: {type_id}')
+                    type_results.append([type_id,json.loads(json.dumps({"name": type_name}))])
                 # 결과 반환
                 return Response(
                     {
@@ -114,11 +117,13 @@ class ControllerView(APIView):
                         "write": serializer.data,
                         "extracted_names": extracted_names,
                         "nodes": nodes_result,
-                        "category" : [json.loads('{"type_name": "' + type_name[0] + '"}'), type_id]
+                        "category" : type_results,
                     },
                     status=status.HTTP_201_CREATED,
                 )
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                print(f"에러: {e}")
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
         writes = Write.objects.all()
