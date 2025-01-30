@@ -6,7 +6,7 @@ echo "Starting entrypoint script..."
 #python manage.py makemigrations
 # Django migration 자동화
 echo "Running migrations..."
-#python manage.py migrate || { echo "Migration failed"; exit 1; }
+python manage.py migrate || { echo "Migration failed"; exit 1; }
 
 # 정적 파일 모으기 (collectstatic)
 echo "Collecting static files..."
