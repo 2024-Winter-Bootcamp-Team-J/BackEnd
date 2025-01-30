@@ -12,9 +12,8 @@ scrape_configs:
       - targets: ['cadvisor:8080']  # cAdvisor 데이터를 수집
 
   - job_name: 'django'
-    metrics_path: /metrics/  # 메트릭 경로 추가
     static_configs:
-      - targets: ['django_web:8000']  # Django 웹 서버에서 메트릭 수집
+      - targets: ['web:8000']  # Django 웹 서버에서 메트릭 수집
 
   - job_name: 'node-exporter'
     static_configs:

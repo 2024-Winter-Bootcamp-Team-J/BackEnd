@@ -110,7 +110,7 @@ services:
 
   web:
     build: .
-    container_name: django_web
+    container_name: web
     command: python manage.py runserver 0.0.0.0:8000
     env_file:
       - .env
@@ -179,6 +179,10 @@ services:
     container_name: node-exporter
     ports:
       - "9100:9100"  # node-exporter 웹 UI 접근 포트
+    volumes:
+      - '/:/host:ro,rslave'
+    command:
+      - '--path.rootfs=/host'
     networks:
       - django-network
     depends_on:

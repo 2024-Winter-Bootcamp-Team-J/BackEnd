@@ -24,8 +24,14 @@ from rest_framework_simplejwt.views import (
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.http import HttpResponse  # 임시로 홈 페이지 뷰를 작성
-def home(request):
-    return HttpResponse("Welcome to the homepage!")
+from prometheus_client import generate_latest
+from django.http import HttpResponse
+from django.views import View
+
+# Prometheus 메트릭을 반환하는 뷰
+class ExportToDjangoView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(generate_latest(), content_type='text/plain; version=0.0.4; charset=utf-8')
 
 # Swagger 설정
 schema_view = get_schema_view(
@@ -33,8 +39,7 @@ schema_view = get_schema_view(
         title="LinkIn",
         default_version='v1',
         description="자동생성 인간관계도 API 문서",
-        terms_of_service="https://www.google.com/policies/terms/",
-    ),
+        terms_of_service="https://www.google.com/policies/terms/"),
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
@@ -49,8 +54,12 @@ AUTH_HEADER = openapi.Parameter(
 
 schema_view.with_ui("swagger", cache_timeout=0)
 
+# 홈 페이지 뷰
+def home(request):
+    return HttpResponse("Welcome to the homepage!")
+
 urlpatterns = [
-    path('admin', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', home),  # 루트 URL에 홈 페이지 뷰 연결
     path('memos', include('memo.urls')),
     path('node', include('node.urls')),  # node 앱의 URL 연결
@@ -65,5 +74,6 @@ urlpatterns = [
     path('api/token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
 
-    path("metrics/", include("django_prometheus.urls")),
+    # Prometheus 메트릭스 URL
+    path('metrics', ExportToDjangoView.as_view(), name='prometheus-metrics'),
 ]
