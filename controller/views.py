@@ -34,7 +34,15 @@ class ControllerView(APIView):
             write = serializer.save()
             try:
                 input_text = write.content
-                category = category_extract_task.delay(input_text)
+                # 비동기 작업에서 카테고리 추출
+                category = category_extract(input_text)
+                if 'error' in category:
+                    # 카테고리 추출 실패 처리
+                    return Response(
+                        {"error": f"카테고리 추출 실패: {category['details']}"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
                 extracted_names = name_extract(input_text)
             except ValueError as e:
                 return Response(
@@ -103,6 +111,7 @@ class ControllerView(APIView):
                             "name": name,
                         })
                         continue
+
             try:
                 type_name = category.get()['category']
                 print(f'type_name: {type_name}')
@@ -119,8 +128,7 @@ class ControllerView(APIView):
                 )
             except Exception as e:
                 print(f"예외 발생: {str(e)}")
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)  # 명확한 응답 추가
-
+                return Response({"error": f"카테고리 처리 중 오류 발생: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
     def get(self, request):
         writes = Write.objects.all()
         serializer = WriteSerializer(writes, many=True)
