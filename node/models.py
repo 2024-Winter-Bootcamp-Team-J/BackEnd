@@ -1,9 +1,10 @@
 from django.db import models
+from django_prometheus.models import ExportModelOperationsMixin
 from django.conf import settings
 from users.models import User
 
 
-class Node(models.Model):
+class Node(ExportModelOperationsMixin('Node'),models.Model):
     node_id = models.BigAutoField(primary_key=True)  # Primary Key로 BigInt 타입
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='nodes',null=False)
     name = models.CharField(max_length=50)  # 이름, 최대 길이 50

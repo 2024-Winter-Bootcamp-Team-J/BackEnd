@@ -1,6 +1,7 @@
 from django.db import models
+from django_prometheus.models import ExportModelOperationsMixin
 
-class Memo(models.Model):
+class Memo(ExportModelOperationsMixin('Memo'),models.Model):
     memo_id = models.BigAutoField(primary_key=True)
     node = models.ForeignKey('node.Node', on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField()

@@ -18,8 +18,6 @@ from celery.schedules import crontab
 
 load_dotenv()
 
-# Prometheus URL 설정
-PROMETHEUS_URL = os.getenv('PROMETHEUS_URL', 'http://prometheus:9090')  # 기본값 설정
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,7 +31,7 @@ SECRET_KEY = "SECRET_KEY"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -58,6 +56,8 @@ INSTALLED_APPS = [
     'controller',  # 'controller' 앱 추가
     "django_opensearch_dsl",  # django_opensearch_dsl 앱 추가
     'django_celery_results', # Celery Results 앱 추가
+    'corsheaders',  # CORS 관련 앱 추가
+    "django_prometheus"
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -80,6 +80,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware', # corsheaders 미들웨어 추가
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -167,15 +169,16 @@ AUTH_USER_MODEL = 'users.User'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME", "postgres"),
-        "USER": os.getenv("DB_USER", "postgres"),
-        "PASSWORD": os.getenv("DB_PASSWORD", "postgres"),
-        "HOST": os.getenv("DB_HOST", "postgres"),
-        "PORT": os.getenv("DB_PORT", 5432),
-    }
+    'default': {
+        'ENGINE': 'django_prometheus.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'postgres'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
+        'HOST': os.getenv('DB_HOST', 'postgres'),
+        'PORT': os.getenv('DB_PORT', 5432),
+    },
 }
+
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',

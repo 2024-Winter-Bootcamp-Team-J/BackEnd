@@ -1,8 +1,9 @@
+from django_prometheus.models import ExportModelOperationsMixin
 from django.db import models
 from users.models import User
 from node.models import Node
 
-class RelationType(models.Model):
+class RelationType(ExportModelOperationsMixin('RelationType'),models.Model):
     """
     관계 타입을 나타내는 모델.
     """
@@ -21,7 +22,7 @@ class RelationType(models.Model):
     def __str__(self):
         return self.name
 
-class UserNodeRelation(models.Model):
+class UserNodeRelation(ExportModelOperationsMixin('UserNodeRelation'),models.Model):
     user_node_id = models.BigAutoField(primary_key=True)
     node_id = models.ForeignKey(Node, on_delete=models.CASCADE, related_name='user_relations')
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='node_relations')
@@ -35,7 +36,7 @@ class UserNodeRelation(models.Model):
         return f"UserNodeRelation {self.user_node_id}"
 
 
-class NodeRelation(models.Model):
+class NodeRelation(ExportModelOperationsMixin('NodeRelation'),models.Model):
     """
     노드 간 관계를 나타내는 모델.
     - 두 노드 간의 관계 정보를 저장
@@ -52,7 +53,7 @@ class NodeRelation(models.Model):
     def __str__(self):
         return f"NodeRelation {self.node_relation_id}"
 
-class UserNodeToType(models.Model):
+class UserNodeToType(ExportModelOperationsMixin('UserNodeToType'),models.Model):
     """
     NodeRelation과 RelationType 간의 연결을 나타내는 모델.
     - 특정 관계(NodeRelation)가 어떤 타입(RelationType)에 속하는지 저장
@@ -60,7 +61,7 @@ class UserNodeToType(models.Model):
     user_node_id = models.ForeignKey(UserNodeRelation, on_delete=models.CASCADE)
     relation_type_id = models.ForeignKey(RelationType, on_delete=models.CASCADE)
 
-class RelationToType(models.Model):
+class RelationToType(ExportModelOperationsMixin('RelationToType'),models.Model):
     """
     노드 관계와 관계 타입 연결 모델
     - 특정 노드 간 관계(NodeRelation)가 어떤 관계 타입(RelationType)에 속하는지를 저장.

@@ -32,7 +32,7 @@ class NodeCreateSerializer(serializers.ModelSerializer):
             "message": "Node created successfully",
             "data": {
                 "node_id": instance.node_id,
-                "user": instance.user.user_id,
+                "user_id": instance.user.user_id,
                 "name": instance.name,
                 "node_img": instance.node_img,
                 "is_deleted": instance.is_deleted,
@@ -54,6 +54,7 @@ class NodeImageUpdateSerializer(serializers.ModelSerializer):
 class NodeListResponseSerializer(serializers.ModelSerializer):
     relation_type_ids = serializers.SerializerMethodField()  # 동적 필드를 위한 SerializerMethodField 사용
     user_id = serializers.IntegerField(required=False)
+
 
     class Meta:
         model = Node

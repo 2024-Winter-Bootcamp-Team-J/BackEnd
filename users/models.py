@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
-
+from django_prometheus.models import ExportModelOperationsMixin
 
 # 사용자 관리자 클래스
 class UserManager(BaseUserManager):
