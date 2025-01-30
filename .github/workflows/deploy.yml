@@ -53,7 +53,8 @@ jobs:
             --push 
             -t gisu1102/2025techer:celery-worker \
             -f ./Dockerfile \
-            ./  # Celery 워커 Dockerfile 경로
+            ./  
+
 #          docker buildx build \
 #            --platform linux/amd64,linux/arm64 \
 #            --push \
