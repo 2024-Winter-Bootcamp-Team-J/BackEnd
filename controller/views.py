@@ -36,6 +36,7 @@ class ControllerView(APIView):
                 category = category_extract_task.delay(input_text)
                 extracted_names = name_extract(input_text)
             except ValueError as e:
+                print("이름추출 실패 오류")
                 return Response(
                     {"error": f"이름 추출 실패: {str(e)}"},
                     status=status.HTTP_400_BAD_REQUEST,
