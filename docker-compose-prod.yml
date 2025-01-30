@@ -58,7 +58,7 @@ services:
       - .prod.env
     volumes:
       - ./django_logs:/code/django_logs
-    command: celery -A myCelery worker --loglevel=info
+    command: celery -A config worker --loglevel=info
     depends_on:
       - rabbitmq
       - web
