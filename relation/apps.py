@@ -11,7 +11,7 @@ class RelationConfig(AppConfig):
 
         def create_default_relation_types(sender, **kwargs):
             if 'relation_relationtype' in connection.introspection.table_names():
-                default_types = ['친구', '가족', '게임', '지인', '직장']
+                default_types = ['친구', '가족', '게임', '대학동기', '직장']
                 for name in default_types:
                     RelationType.objects.get_or_create(name=name, user_id=None, is_default=True)
 

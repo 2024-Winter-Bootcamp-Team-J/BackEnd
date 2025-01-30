@@ -3,9 +3,12 @@ import os
 from dotenv import load_dotenv
 import json
 load_dotenv()
-# API 키 설정
+
+
 def name_extract(text):
+
     openai.api_key = os.getenv('OPENAI_API_KEY')
+    
     response = openai.chat.completions.create(
         model="gpt-4o",
         messages = [
@@ -23,7 +26,12 @@ def name_extract(text):
                     "   출력: {\"group1\": [\"윤서\"], \"group2\": [\"지민\"]}\n"
                     "4. 입력에 사람이름이 없다면 다음과 같이 응답해:\n"
                     "   {\"group1\": \"none\"}\n"
-                    "5. 출력은 **오직 JSON 형식**만 해야 하며, 추가적인 설명이나 텍스트는 포함되지 않도록 해"
+                    "5. 출력은 **오직 JSON 형식**만 해야 하며, 추가적인 설명이나 텍스트는 포함되지 않도록 해\n"
+                    "6. 가족을 나타내는 단어는 이름과 같이 추출해. \n"
+                    "   예시:\n"
+                    "   입력: \"엄마랑 고스톱을 쳤다.\"\n"
+                    "   출력: {\"group1\": [\"엄마\"]}\n"
+
                 )
             }
         ]
@@ -39,9 +47,8 @@ def name_extract(text):
     except:
         pass
     message = json.loads(message)    
-    # 추후 로깅으로 대체
     print(message) #json 형식 ex: {"group1": "윤서", "group2": "우민"}
     return message
 
 # 테스트용
-# name_extract(input())
+#name_extract(input())

@@ -56,6 +56,7 @@ class NodeListView(APIView):
                             'is_deleted': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='삭제 여부'),
                             'created_at': openapi.Schema(type=openapi.TYPE_STRING, description='생성 시각', format=openapi.FORMAT_DATETIME),
                             'deleted_at': openapi.Schema(type=openapi.TYPE_STRING, description='삭제 시각', format=openapi.FORMAT_DATETIME, nullable=True),
+                            'node_img': openapi.Schema(type=openapi.TYPE_STRING, description='노드 이미지 URL', nullable=True),
                         }
                     )
                 )
@@ -88,6 +89,7 @@ class NodeDetailView(APIView):
                         'is_deleted': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='삭제 여부'),
                         'created_at': openapi.Schema(type=openapi.TYPE_STRING, description='생성 시각', format=openapi.FORMAT_DATETIME),
                         'deleted_at': openapi.Schema(type=openapi.TYPE_STRING, description='삭제 시각', format=openapi.FORMAT_DATETIME, nullable=True),
+                        'node_img': openapi.Schema(type=openapi.TYPE_STRING, description='노드 이미지 URL', nullable=True),
                     }
                 )
             ),
