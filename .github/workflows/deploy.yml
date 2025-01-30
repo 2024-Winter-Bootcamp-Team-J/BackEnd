@@ -39,7 +39,6 @@ jobs:
             curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             sudo chmod +x /usr/local/bin/docker-compose
             docker-compose --version  # 확인용
-
       - name: Build and Push Multi-Platform Images
         run: |
           docker buildx create --use
@@ -61,9 +60,9 @@ jobs:
             -t gisu1102/2025techer:celery-worker \
             -f ./Dockerfile \
             ./  # Celery 워커 Dockerfile 경로
-          docker buildx build \
-            --platform linux/amd64,linux/arm64 \
-            --push \
+        #  docker buildx build \
+        #    --platform linux/amd64,linux/arm64 \
+        #    --push \
         #    -t gisu1102/2025techer:celery-beat \
         #    -f ./Dockerfile \
         #    ./  # Celery Beat Dockerfile 경로
