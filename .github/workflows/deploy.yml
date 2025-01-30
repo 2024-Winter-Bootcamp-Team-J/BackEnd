@@ -58,7 +58,7 @@ jobs:
             --platform linux/amd64,linux/arm64 \
             --push \
             -t gisu1102/2025techer:celery-worker \
-            -f ./Dockerfile \
+            -f ./DockerfileCelery \
             ./  # Celery 워커 Dockerfile 경로
 
 
