@@ -17,4 +17,4 @@ python manage.py collectstatic --noinput || { echo "Collectstatic failed"; exit 
 
 # Gunicorn 포그라운드에서 실행
 echo "Starting Gunicorn..."
-exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3
+exec gunicorn --workers=4 --timeout=30 --worker-class=gevent  config.wsgi:application --bind 0.0.0.0:8000
