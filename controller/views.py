@@ -107,7 +107,6 @@ class ControllerView(APIView):
                 type_name = category.get()['category']
                 print(f'type_name: {type_name}')
                 type_id = RelationType.objects.filter(name=type_name[0]).values("relation_type_id")[0]
-                # 결과 반환
                 return Response(
                     {
                         "message": "글 작성, 이름 추출, Node 및 메모 처리 완료",
@@ -118,8 +117,9 @@ class ControllerView(APIView):
                     },
                     status=status.HTTP_201_CREATED,
                 )
-            except Exception:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                print(f"예외 발생: {str(e)}")
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)  # 명확한 응답 추가
 
     def get(self, request):
         writes = Write.objects.all()
