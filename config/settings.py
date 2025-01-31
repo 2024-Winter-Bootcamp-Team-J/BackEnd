@@ -159,6 +159,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",  # 개발 환경용
     "https://www.link-in.site",  # 프론트엔드 도메인
     "https://api.link-in.site",  # 백엔드 도메인 (필요 시)
 ]
