@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - chore/develop_prod  # 해당 브랜치에 푸시될 때 배포 실행
+      - main  # 해당 브랜치에 푸시될 때 배포 실행
 
 jobs:
   deploy:
@@ -48,20 +48,6 @@ jobs:
             -t gisu1102/2025techer:web \
             -f ./Dockerfile \
             ./
-          docker buildx build \
-            --platform linux/amd64,linux/arm64 \
-            --push \
-            -t gisu1102/2025techer:nginx \
-            -f ./nginx/Dockerfile \
-            ./nginx
-          docker buildx build \
-            --platform linux/amd64,linux/arm64 \
-            --push \
-            -t gisu1102/2025techer:celery-worker \
-            -f ./DockerfileCelery \
-            ./  # Celery 워커 Dockerfile 경로
-
-
 
 
       # SSH 비밀 키를 임시 파일로 저장
