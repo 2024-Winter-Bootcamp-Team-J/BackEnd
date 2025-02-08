@@ -24,6 +24,9 @@ from rest_framework_simplejwt.views import (
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.http import HttpResponse  # 임시로 홈 페이지 뷰를 작성
+from django.conf.urls.static import static
+from django.conf import settings
+
 def home(request):
     return HttpResponse("Welcome to the homepage!")
 
@@ -37,6 +40,9 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
+
+    url='https://api.link-in.site'  # Base URL 강제 설정
+
 )
 
 # Swagger에서 jwt 인증 관련
@@ -56,6 +62,7 @@ urlpatterns = [
     path('node', include('node.urls')),  # node 앱의 URL 연결
     path('users', include('users.urls')),
     path('search', include('search.urls')), # search 앱의 URL을 포함
+    path('controller', include('controller.urls')),
     path('relations', include('relation.urls')),  # relation 앱의 URL 연결
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
@@ -64,3 +71,4 @@ urlpatterns = [
     path('api/token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
 ]
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

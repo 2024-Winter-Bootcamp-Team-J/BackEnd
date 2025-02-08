@@ -16,7 +16,6 @@ class MemoDocument(Document):
         fields = [
             'memo_id',
             'node_id',
-            'user_id',
             'content',
             'is_deleted',
             'created_at',
@@ -33,6 +32,7 @@ class NodeDocument(Document):
         # Node 모델에서 정의된 필드를 Openearch 필드로 자동 매핑
         fields = [
             'node_id',
+            'user',
             'name',
             'created_at',
             'is_deleted',

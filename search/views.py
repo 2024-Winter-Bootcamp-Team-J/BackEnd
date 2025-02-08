@@ -7,8 +7,7 @@ from .documents import NodeDocument  # NodeDocument를 import하여 사용
 from django.http import JsonResponse
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-
-class MemoSearchView(APIView):
+class SearchView(APIView):
     """
         Opensearch에서 memo_content와 node_name을을 검색하는 API 뷰입니다.
     """
@@ -30,9 +29,8 @@ class MemoSearchView(APIView):
             return JsonResponse({'error': 'Query parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # opensearch에서 검색 실행
-        memo_results = MemoDocument.search().query('match', content=query).execute()
-        node_results = NodeDocument.search().query('match', name=query).execute()
-
+        memo_results = MemoDocument.search().query('wildcard', content=f'*{query}*').execute()
+        print(f'memo_results: {memo_results}')
         # 검색 결과를 합쳐서 정렬
         
         # 검색된 결과를 직렬화하여 반환
@@ -40,21 +38,12 @@ class MemoSearchView(APIView):
         results.extend(
             {
                 'memo_id': result.memo_id,
-                'node_id_inMemo': result.node_id,
+                'node_id': result.node_id,
                 'content': result.content,
                 'created_at': result.created_at,
                 'is_deleted': result.is_deleted,
             }
             for result in memo_results
-        )
-        results.extend(
-            {
-                'node_id_inNode': result.node_id,
-                'name': result.name,
-                'created_at': result.created_at,
-                'is_deleted': result.is_deleted,
-            }
-            for result in node_results
         )
         
         # 검색결과가 없는 경우 404 에러를 반환

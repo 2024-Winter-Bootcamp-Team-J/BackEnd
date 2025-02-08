@@ -16,14 +16,8 @@ RUN pip install --upgrade pip \
 # 프로젝트 복사
 COPY . /code/
 
-# Nginx 설치는 Docker Compose 파일에서 분리하여 관리하는 것이 좋음
-# Django는 Gunicorn을 사용하여 실행하고, Nginx는 별도의 서비스로 관리
-
-EXPOSE 8000
-
 # entrypoint.sh 복사 및 실행 권한 추가
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
+COPY ./CeleryEntrypoint.sh /CeleryEntrypoint.sh
+RUN chmod +x /CeleryEntrypoint.sh
 # entrypoint.sh를 엔트리포인트로 설정
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/CeleryEntrypoint.sh"]

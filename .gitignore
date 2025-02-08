@@ -12,6 +12,10 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media
+# logstash
+utils/logstash/logstash.db
+# log file
+django_logs.json
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
@@ -141,7 +145,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
+prod.env/
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -273,3 +277,4 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/django,python,redis
 
 secrets.json
+

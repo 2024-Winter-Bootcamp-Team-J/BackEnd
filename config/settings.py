@@ -18,6 +18,9 @@ from celery.schedules import crontab
 
 load_dotenv()
 
+# Prometheus URL 설정
+PROMETHEUS_URL = os.getenv('PROMETHEUS_URL', 'http://prometheus:9090')  # 기본값 설정
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,12 +29,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "SECRET_KEY"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
-
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
 # Application definition
 
@@ -52,33 +54,33 @@ INSTALLED_APPS = [
     'node', # node 앱 추가
     'relation', # relation 앱 추가
     'search',  # 'search' 앱 추가
-    "django_opensearch_dsl",  # django_elasticsearch_dsl 앱 추가
-    'django_celery_beat', # Celery Beat 앱 추가
+    'controller',  # 'controller' 앱 추가
+    "django_opensearch_dsl",  # django_opensearch_dsl 앱 추가
     'django_celery_results', # Celery Results 앱 추가
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+
 
 OPENSEARCH_DSL = {
     'default': {
-        'HOST': 'https://opensearch:9200',  # Docker Compose에서 설정한 서비스 이름
+        'HOST': 'http://opensearch:9200',
         'PORT': 9200,
-        'USE_SSL': True,  # SSL 사용 여부
-        'TIMEOUT': 30,  # 타임아웃 설정
+        'USE_SSL': False,
+        'TIMEOUT': 30,
+        'http_auth': ('admin', 'Link-in1234'),
     }
 }
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    'corsheaders.middleware.CorsMiddleware', # corsheaders 미들웨어 추가
+    'corsheaders.middleware.CorsMiddleware',  # CORS 설정
+    'django.middleware.security.SecurityMiddleware',  # 보안 관련 설정
+    'django.contrib.sessions.middleware.SessionMiddleware',  # 세션 관리
+    'django.middleware.common.CommonMiddleware',  # 기본적인 공통 미들웨어
+    'django.middleware.csrf.CsrfViewMiddleware',  # CSRF 보호
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # 인증 처리
+    'django.contrib.messages.middleware.MessageMiddleware',  # 메시지 처리
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',  # XFrame 옵션
 ]
-
+X_FRAME_OPTIONS = 'ALLOWALL'
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -97,8 +99,69 @@ TEMPLATES = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'json': {  # jsno 포맷터
+            'format': '{"timestamp": "%(asctime)s", "level": "%(levelname)s", "module": "%(module)s", "message": "%(message)s"}',
+            'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/code/django_logs/django.log',  # 로그 파일 경로
+            'formatter': 'json',  # JSON 포맷터를 사용
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.contrib.admin': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.core.cache': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.middleware': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+
+
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # 프론트엔드 도메인
+    "http://localhost:3000",  # 개발 환경용
+    "https://www.link-in.site",  # 프론트엔드 도메인
+    "https://api.link-in.site",  # 백엔드 도메인 (필요 시)
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",  # 개발 환경용
+    "https://www.link-in.site",  # 프론트엔드 도메인
+    "https://api.link-in.site",  # 백엔드 도메인 (필요 시)
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -173,17 +236,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -197,7 +255,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),  # Access Token 유효기간
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=80),  # Access Token 유효기간
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh Token 유효기간
     'ROTATE_REFRESH_TOKENS': True,                  # Refresh Token 재발급 시 새로 발급
     'BLACKLIST_AFTER_ROTATION': True,               # 이전 Refresh Token 블랙리스트 처리
@@ -226,10 +284,23 @@ CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-
+'''
 CELERY_BEAT_SCHEDULE = {
     'example-task': {
         'task': 'myapp.tasks.example_task',
         'schedule': crontab(minute='*/1'),  # 매 1분마다 실행
     },
 }
+'''
+
+
+# 정적 파일 설정
+STATIC_URL = '/static/'  # URL 경로
+# collectstatic으로 모을 정적 파일들이 위치할 디렉토리
+STATIC_ROOT = '/app/static/' # static 디렉토리로 설정
+
+
+# 미디어 파일 설정
+MEDIA_URL = '/media/'  # URL 경로
+# 미디어 파일들이 저장될 디렉토리
+MEDIA_ROOT = '/app/media'

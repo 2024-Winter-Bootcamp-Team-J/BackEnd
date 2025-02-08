@@ -33,27 +33,13 @@ services:
   celery:
     container_name: celery_worker
     build: .
-    command: celery -A myCelery worker --loglevel=info
+    command: celery -A config worker --loglevel=info
     volumes:
       - .:/app
     depends_on:
       - rabbitmq
       - web
       - redis
-    networks:
-      - django-network
-
-  # Celery Beat (주기적 작업 실행)
-  celery-beat:
-    container_name: celery-beat
-    build: .
-    command: celery -A myCelery beat --loglevel=info
-    volumes:
-      - .:/app
-    depends_on:
-      - web
-      - rabbitmq
-      - celery
     networks:
       - django-network
 
@@ -70,22 +56,42 @@ services:
     networks:
       - django-network
 
+  # OpenSearch 서비스
   opensearch:
-    image: opensearchproject/opensearch:2.4.0
+    image: opensearchproject/opensearch:latest
     container_name: opensearch
     environment:
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=Link-in1234
+
     ports:
-      - "9200:9200"
-      - "9600:9600"
+      - "9200:9200" 
     volumes:
       - opensearch_data:/usr/share/opensearch/data
+    networks:
+      - django-network
+
+  # OpenSearch 대시보드
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: opensearch-dashboards
+    ports:
+      - "5601:5601"
+    environment:
+      - OPENSEARCH_HOSTS=https://opensearch:9200
+    networks:
+      - django-network
+
+  # Logstash
+  logstash:
+    image: opensearchproject/logstash-oss-with-opensearch-output-plugin:latest
+    container_name: logstash
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      # 로컬에 저장한 django 로그를 logstash에 전달하기 위한 볼륨 매핑
+      - ./django_logs:/usr/share/logstash/logs
     networks:
       - django-network
 
@@ -97,12 +103,17 @@ services:
       - .env
     volumes:
       - .:/code
+      # docker에서 실행되는 django의 로그를 로컬에 저장하기 위한 볼륨 매핑
+      - ./django_logs:/code/django_logs
+      # fine_tuning을 위한 jsonl 파일
+      - ./controller/category.jsonl:/code/controller/category.jsonl
     ports:
       - "8000:8000"
     depends_on:
       - db
       - redis
       - rabbitmq
+      - opensearch
     networks:
       - django-network
 

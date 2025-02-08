@@ -5,13 +5,13 @@ from celery import Celery
 # Django 설정을 Celery에 지정
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
-app = Celery('backend')
+app = Celery('config')
 
 # Django의 설정을 Celery 설정으로 가져옴
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # 모든 Django 앱에서 비동기 태스크를 로드
-app.autodiscover_tasks(['controller'])
+app.autodiscover_tasks()
 
 @app.task(bind=True)
 def debug_task(self):

@@ -2,18 +2,23 @@ from rest_framework import serializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Memo
+from node.models import Node
 
 # 메모 생성 요청과 응답을 처리하기 위한 Serializer
 class MemoCreateSerializer(serializers.Serializer):
     """
     메모 생성을 위한 요청 데이터를 처리하는 Serializer입니다.
     """
-    user_id = serializers.IntegerField()  # 메모를 생성할 사용자 ID
-    node_id = serializers.IntegerField() # 메모를 생성할 노드 ID
-    content = serializers.CharField()  # 메모 내용
+    node = serializers.PrimaryKeyRelatedField(queryset=Node.objects.all())
+    content = serializers.CharField()
     created_at = serializers.DateTimeField(
         format="%Y-%m-%d-%H-%M-%S", read_only=True
     )  # 생성 시각(자동 생성, 읽기 전용)
+
+    class Meta:
+        model = Memo
+        fields = ['node', 'content', 'created_at']  # 필요한 필드 명시
+        read_only_fields = ['created_at']
     def create(self, validated_data):
         """
         유효한 데이터로부터 새로운 Memo 객체를 생성합니다.
@@ -48,7 +53,6 @@ class MemoCreateView(APIView):
         if serializer.is_valid():  # 데이터가 유효한지 확인
             # 데이터베이스에 새 메모를 생성합니다.
             Memo.objects.create(
-                user_id=serializer.validated_data['user_id'],  # 사용자 ID
                 content=serializer.validated_data['content'], # 메모 내용
                 node_id = serializer.validated_data['node_id'], # 노드 ID
             )
@@ -78,3 +82,18 @@ class MemoRetrieveView(APIView):
         except Memo.DoesNotExist:
             # 메모가 존재하지 않을 경우 처리합니다.
             return Response({'error': 'Memo not found'}, status=404)  # HTTP 404 Not Found
+
+class NodeMemoRetrieveSerializer(serializers.Serializer):
+    """
+    메모 조회 요청에 대한 응답 데이터를 처리하는 Serializer입니다.
+    """
+    memo_id = serializers.IntegerField()
+    content = serializers.CharField()  # 메모 내용
+    created_at = serializers.DateTimeField(
+        format="%Y-%m-%d-%H-%M-%S"
+    )  # 생성 시각('yyyy-mm-dd-hh-mm-ss' 형식)
+    node = serializers.SerializerMethodField()  # node 세부 정보 반환
+
+    def get_node(self, obj):
+        return {"id": obj.node.node_id}  # node 객체의 특정 필드 반환
+
