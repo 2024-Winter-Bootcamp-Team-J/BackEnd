@@ -29,12 +29,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "SECRET_KEY"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
-
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
 # Application definition
 
@@ -59,29 +58,29 @@ INSTALLED_APPS = [
     "django_opensearch_dsl",  # django_opensearch_dsl 앱 추가
     'django_celery_results', # Celery Results 앱 추가
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+
 
 OPENSEARCH_DSL = {
     'default': {
-        'HOST': 'https://opensearch:9200',
+        'HOST': 'http://opensearch:9200',
         'PORT': 9200,
-        'USE_SSL': True,
+        'USE_SSL': False,
         'TIMEOUT': 30,
         'http_auth': ('admin', 'Link-in1234'),
     }
 }
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware', # corsheaders 미들웨어 추가
+    'corsheaders.middleware.CorsMiddleware',  # CORS 설정
+    'django.middleware.security.SecurityMiddleware',  # 보안 관련 설정
+    'django.contrib.sessions.middleware.SessionMiddleware',  # 세션 관리
+    'django.middleware.common.CommonMiddleware',  # 기본적인 공통 미들웨어
+    'django.middleware.csrf.CsrfViewMiddleware',  # CSRF 보호
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # 인증 처리
+    'django.contrib.messages.middleware.MessageMiddleware',  # 메시지 처리
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',  # XFrame 옵션
 ]
-
+X_FRAME_OPTIONS = 'ALLOWALL'
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -113,7 +112,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/app/django_logs/django.log',  # 로그 파일 경로
+            'filename': '/code/django_logs/django.log',  # 로그 파일 경로
             'formatter': 'json',  # JSON 포맷터를 사용
         },
     },
@@ -153,9 +152,16 @@ LOGGING = {
 
 
 
-
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # 프론트엔드 도메인
+    "http://localhost:3000",  # 개발 환경용
+    "https://www.link-in.site",  # 프론트엔드 도메인
+    "https://api.link-in.site",  # 백엔드 도메인 (필요 시)
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",  # 개발 환경용
+    "https://www.link-in.site",  # 프론트엔드 도메인
+    "https://api.link-in.site",  # 백엔드 도메인 (필요 시)
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -237,11 +243,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -280,3 +281,26 @@ SWAGGER_SETTINGS = {
 # Celery setttings  
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+'''
+CELERY_BEAT_SCHEDULE = {
+    'example-task': {
+        'task': 'myapp.tasks.example_task',
+        'schedule': crontab(minute='*/1'),  # 매 1분마다 실행
+    },
+}
+'''
+
+
+# 정적 파일 설정
+STATIC_URL = '/static/'  # URL 경로
+# collectstatic으로 모을 정적 파일들이 위치할 디렉토리
+STATIC_ROOT = '/app/static/' # static 디렉토리로 설정
+
+
+# 미디어 파일 설정
+MEDIA_URL = '/media/'  # URL 경로
+# 미디어 파일들이 저장될 디렉토리
+MEDIA_ROOT = '/app/media'

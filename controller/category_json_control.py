@@ -76,7 +76,7 @@ def category_json_update():
         print("삭제하기 위한 중복 파일 찾기 중 오류")
         return
     # 새 파일 경로
-    new_file_path = "/app/controller/category.jsonl"
+    new_file_path = "/code/controller/category.jsonl"
 
     # 새로운 파일 업로드
     response = upload_file(new_file_path)

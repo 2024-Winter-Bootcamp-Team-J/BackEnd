@@ -1,0 +1,110 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main  # 해당 브랜치에 푸시될 때 배포 실행
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true
+
+      - name: Install Docker Compose
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y curl
+            curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            docker-compose --version
+      - name: Build and Push Multi-Platform Images
+        run: |
+          docker buildx create --use
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --push \
+            -t gisu1102/2025techer:web \
+            -f ./Dockerfile \
+            ./
+
+
+      # SSH 비밀 키를 임시 파일로 저장
+      - name: "Saving SSH private key to file..."
+        run : |
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ./id_rsa || { echo "Failed to save SSH private key"; exit 1; }
+            chmod 600 ./id_rsa || { echo "Failed to set permissions for SSH key"; exit 1; }
+            
+
+      # 먼저 로컬에서 docker-compose-prod.yml을 EC2로 전송
+      - name: Copy docker-compose-prod.yml to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no -i ./id_rsa ./docker-compose-prod.yml ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/ubuntu/
+          
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # EC2 서버에서 먼저 Docker 및 Docker Compose가 설치되어 있는지 확인
+            if ! command -v docker &> /dev/null; then
+              echo "Docker is not installed. Installing Docker..."
+              sudo apt update
+              sudo apt install -y docker.io
+            fi
+            
+            if ! command -v docker-compose &> /dev/null; then
+              echo "Docker Compose is not installed. Installing Docker Compose..."
+              sudo apt install -y curl
+              curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+            fi
+            
+            # .prod.env 파일을 GitHub Secrets에서 가져와서 EC2에 복사
+            echo "Decoding .env file from GitHub Secrets..."
+            echo "${{ secrets.MY_ENV_FILE }}" | base64 --decode > .prod.env || { echo "Base64 decode failed"; exit 1; }
+            echo "prod.env file decoded successfully"
+            
+            
+          
+            # 해당 프로젝트 폴더로 이동 (필요한 경우)
+            cd /home/ubuntu
+            
+             # 기존 컨테이너 중지 및 삭제
+            echo "Stopping and removing old containers..."
+            docker-compose -f docker-compose-prod.yml down
+
+            # 최신 Docker 이미지를 가져오기 (docker-compose-prod.yml에 정의된 모든 서비스에 대해 pull 실행)
+            echo "Pulling the latest Docker images..."
+            docker-compose -f docker-compose-prod.yml pull 
+
+            # 컨테이너 백그라운드에서 실행
+            echo "Starting Docker containers..."
+            docker-compose -f docker-compose-prod.yml up -d
+
+            # 배포가 성공적으로 완료된 후, 상태 확인
+            docker ps

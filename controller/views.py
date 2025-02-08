@@ -36,11 +36,11 @@ class ControllerView(APIView):
                 category = category_extract_task.delay(input_text)
                 extracted_names = name_extract(input_text)
             except ValueError as e:
+                print("이름추출 실패 오류")
                 return Response(
                     {"error": f"이름 추출 실패: {str(e)}"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-
             # 그룹(이벤트)별 node 검색 및 생성
             nodes_result = {}
             node_data = {}
@@ -60,7 +60,7 @@ class ControllerView(APIView):
                             print(node_data)
                         else:
                             node_serializer = NodeCreateSerializer(
-                                data={"name_id": name, "user_id": write.user.pk})
+                                data={"name": name, "user_id": write.user.pk})
                             if node_serializer.is_valid():  # 유효성 검사
                                 node_create_result = node_serializer.save()  # 저장
                                 node_data = node_serializer.to_representation(node_create_result)["data"]
@@ -70,6 +70,8 @@ class ControllerView(APIView):
                                     "details": node_serializer.errors,
                                     "name": name,
                                 })
+                                print("노드생성 실패 오류")
+                                return Response({"error": "노드생성 실패"}, status=status.HTTP_400_BAD_REQUEST)
                     except Exception as e:
                         print(f"첫 검색이면 들어오는 except")
                         node_serializer = NodeCreateSerializer(
@@ -84,6 +86,8 @@ class ControllerView(APIView):
                                 "details": node_serializer.errors,
                                 "name": name,
                             })
+                            print("노드생성 실패 오류")
+                            return Response({"error": "노드생성 실패"}, status=status.HTTP_400_BAD_REQUEST)
                     
                     # 성공적으로 생성된 노드를 결과에 추가
                     nodes_result[group].append(node_data)
@@ -101,7 +105,8 @@ class ControllerView(APIView):
                             "details": memo_serializer.errors,
                             "name": name,
                         })
-                        continue
+                        print("메모생성 실패 오류")
+                        return Response({"error": "메모생성 실패"}, status=status.HTTP_400_BAD_REQUEST)
             try:
                 type_results = []
                 type_names = category.get()['category']
@@ -122,9 +127,11 @@ class ControllerView(APIView):
                     status=status.HTTP_201_CREATED,
                 )
             except Exception as e:
-                print(f"에러: {e}")
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+                print(f"노드 메모 저장 후 에러: {e}")
+                return Response({"error": "노드메모 저장 후 오류"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            print("리퀘스트가 유효하지 않음")
+            return Response({"error": "리퀘스트가 유효하지 않음"}, status=status.HTTP_400_BAD_REQUEST)
     def get(self, request):
         writes = Write.objects.all()
         serializer = WriteSerializer(writes, many=True)

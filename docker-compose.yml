@@ -65,6 +65,7 @@ services:
       - bootstrap.memory_lock=true
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
       - OPENSEARCH_INITIAL_ADMIN_PASSWORD=Link-in1234
+
     ports:
       - "9200:9200" 
     volumes:
@@ -103,9 +104,9 @@ services:
     volumes:
       - .:/code
       # docker에서 실행되는 django의 로그를 로컬에 저장하기 위한 볼륨 매핑
-      - ./django_logs:/app/django_logs
+      - ./django_logs:/code/django_logs
       # fine_tuning을 위한 jsonl 파일
-      - ./controller/category.jsonl:/app/controller/category.jsonl
+      - ./controller/category.jsonl:/code/controller/category.jsonl
     ports:
       - "8000:8000"
     depends_on:

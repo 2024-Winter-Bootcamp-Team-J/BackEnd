@@ -1,0 +1,142 @@
+version: '3'
+
+services:
+  web:
+    image: gisu1102/2025techer:web
+    container_name: web
+    env_file:
+      - .prod.env
+    entrypoint: ["/entrypoint.sh"]
+    volumes:
+      - logstash_volume:/code/logstash
+      - ./django_logs:/code/django_logs
+      - static_volume:/code/static
+      - media_volume:/code/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - rabbitmq
+      - opensearch
+    networks:
+      - backend-network
+
+  nginx:
+    image: gisu1102/2025techer:nginx
+    container_name: nginx
+    volumes:
+      - ./nginx_logs:/var/log/nginx
+      - static_volume:/code/static
+      - media_volume:/code/media
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - web
+    networks:
+      - backend-network
+
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    env_file:
+      - .prod.env
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - backend-network
+
+  # Celery 워커
+  celery:
+    image: gisu1102/2025techer:celery-worker
+    container_name: celery_worker
+    env_file:
+      - .prod.env
+    volumes:
+      - ./django_logs:/code/django_logs
+    depends_on:
+      - rabbitmq
+      - web
+      - redis
+    networks:
+      - backend-network
+
+
+  # RabbitMQ 서비스
+  rabbitmq:
+    container_name: rabbitmq
+    image: "rabbitmq:3-management"
+    env_file:
+      - .prod.env
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "15672:15672"  # RabbitMQ 웹 UI (관리 페이지)
+      - "5672:5672"    # RabbitMQ 브로커 포트
+    networks:
+      - backend-network
+
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=Link-in1234
+      - plugins.security.disabled=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
+    networks:
+      - backend-network
+
+
+# OpenSearch 대시보드
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: opensearch-dashboards
+    ports:
+      - "5601:5601"
+    environment:
+      OPENSEARCH_HOSTS: '["http://opensearch:9200"]'
+      SERVER_BASEPATH: "/dashboards"
+      SERVER_REWRITEBASEPATH: "true"
+      OPENSEARCH_USERNAME: "admin"          # 기본 관리자 계정
+      OPENSEARCH_PASSWORD: "Link-in1234"   # 관리자 비밀번호
+    networks:
+      - backend-network
+
+  # Logstash
+  logstash:
+    image: opensearchproject/logstash-oss-with-opensearch-output-plugin:latest
+    container_name: logstash
+    volumes:
+      # logstash_volume에 있는 logstash.conf를 logstash 컨테이너 내부로 마운트
+      - logstash_volume:/usr/share/logstash/pipeline  # logstash.conf 파일 마운트
+      - ./django_logs:/usr/share/logstash/logs
+    networks:
+      - backend-network
+    depends_on:
+      - web
+
+volumes:
+  static_volume:
+  media_volume:
+  opensearch_data:
+  logstash_volume:
+
+networks:
+  backend-network:
+    driver: bridge
